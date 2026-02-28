@@ -1,0 +1,17 @@
+{
+  "name": "clawtrace",
+  "version": "1.0.8",
+  "description": "Real-time companion monitor for OpenClaw agents",
+  "homepage": "https://clawtrace.app",
+  "repository": "https://github.com/dibbaa-code/clawtrace",
+  "metadata": {
+    "emoji": "🦀",
+    "category": "monitoring"
+  },
+  "install": {
+    "method": "tarball",
+    "location": "~/.clawtrace",
+    "cli": "~/.local/bin/clawtrace",
+    "start_command": "clawtrace"
+  }
+}
