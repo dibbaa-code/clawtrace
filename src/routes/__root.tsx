@@ -24,7 +24,7 @@ export const Route = createRootRoute({
 
 function NotFound() {
   return (
-    <div className="min-h-screen bg-shell-950 texture-grid flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-shell-950 texture-dots flex items-center justify-center relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-96 h-96 bg-crab-600/10 rounded-full blur-3xl" />

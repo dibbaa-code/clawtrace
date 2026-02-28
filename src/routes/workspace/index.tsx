@@ -535,9 +535,9 @@ function WorkspacePage() {
   return (
     <div className="h-screen flex flex-col bg-shell-950 text-white overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative">
+      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative border-b border-crab-500/20">
         {/* Gradient accent */}
-        <div className="absolute inset-0 bg-linear-to-r from-crab-950/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-crab-500/10 via-transparent to-transparent pointer-events-none" />
 
         <div className="relative flex items-center gap-4">
           <Link
@@ -567,11 +567,10 @@ function WorkspacePage() {
           <button
             onClick={validateAndSetPath}
             disabled={pathValid && workspacePathInput === workspacePath}
-            className={`px-3 py-1.5 text-sm font-display rounded-lg transition-colors shrink-0 ${
-              pathValid && workspacePathInput === workspacePath
+            className={`px-3 py-1.5 text-sm font-display rounded-lg transition-colors shrink-0 ${pathValid && workspacePathInput === workspacePath
                 ? 'bg-shell-800 text-shell-500 cursor-default'
                 : 'bg-crab-600 hover:bg-crab-500 text-white'
-            }`}
+              }`}
           >
             Open
           </button>
@@ -610,157 +609,154 @@ function WorkspacePage() {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             className="border-r border-shell-800 bg-shell-900/50 flex flex-col overflow-hidden"
           >
-           {/* Sidebar header */}
-          <div className={`flex items-center justify-between px-3 py-3 border-b border-shell-800 ${sidebarCollapsed ? 'justify-center' : ''}`}>
-            {!sidebarCollapsed && (
-              <span className="font-display text-xs text-shell-500 uppercase tracking-wider">
-                Files
-              </span>
-            )}
-            <div className={`flex items-center gap-1 ${sidebarCollapsed ? 'mx-auto flex-col' : ''}`}>
-              {loading && !sidebarCollapsed && (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                >
-                  <RefreshCw size={14} className="text-shell-500" />
-                </motion.div>
-              )}
+            {/* Sidebar header */}
+            <div className={`flex items-center justify-between px-3 py-3 border-b border-shell-800 ${sidebarCollapsed ? 'justify-center' : ''}`}>
               {!sidebarCollapsed && (
-                <button
-                  onClick={() => setNewFileDialogOpen(true)}
-                  className="p-1.5 hover:bg-shell-800 rounded transition-colors"
-                  title="New File"
-                >
-                  <Plus size={16} className="text-shell-500 hover:text-neon-mint" />
-                </button>
+                <span className="font-display text-xs text-shell-500 uppercase tracking-wider">
+                  Files
+                </span>
               )}
-              <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="p-1.5 hover:bg-shell-800 rounded transition-colors"
-                title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'}
-              >
-                {sidebarCollapsed ? (
-                  <PanelLeft size={16} className="text-gray-400 hover:text-crab-400" />
-                ) : (
-                  <PanelLeftClose size={16} className="text-shell-500 hover:text-crab-400" />
+              <div className={`flex items-center gap-1 ${sidebarCollapsed ? 'mx-auto flex-col' : ''}`}>
+                {loading && !sidebarCollapsed && (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <RefreshCw size={14} className="text-shell-500" />
+                  </motion.div>
                 )}
-              </button>
-            </div>
-          </div>
-
-          {/* Starred files section */}
-          {starredPaths.size > 0 && (
-            <>
-              {sidebarCollapsed ? (
-                // Collapsed: stacked file icons
-                <div className="flex flex-col items-center gap-1 py-2 border-b border-shell-800">
-                  {[...starredPaths].slice(0, 5).map((filePath) => {
-                    const fileName = filePath.split('/').pop() || filePath
-                    const isSelected = selectedPath === filePath
-                    return (
-                      <button
-                        key={filePath}
-                        onClick={() => handleSelect(filePath, 'file')}
-                        className={`relative p-1.5 rounded transition-colors ${
-                          isSelected ? 'bg-crab-500/20' : 'hover:bg-shell-800'
-                        }`}
-                        title={fileName}
-                      >
-                        <FileText
-                          size={16}
-                          className={isSelected ? 'text-crab-400' : 'text-shell-500'}
-                        />
-                        <Star
-                          size={8}
-                          fill="currentColor"
-                          className="absolute -top-0.5 -right-0.5 text-yellow-400"
-                        />
-                      </button>
-                    )
-                  })}
-                  {starredPaths.size > 5 && (
-                    <span className="text-[11px] text-shell-500">+{starredPaths.size - 5}</span>
+                {!sidebarCollapsed && (
+                  <button
+                    onClick={() => setNewFileDialogOpen(true)}
+                    className="p-1.5 hover:bg-shell-800 rounded transition-colors"
+                    title="New File"
+                  >
+                    <Plus size={16} className="text-shell-500 hover:text-neon-mint" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  className="p-1.5 hover:bg-shell-800 rounded transition-colors"
+                  title={sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'}
+                >
+                  {sidebarCollapsed ? (
+                    <PanelLeft size={16} className="text-gray-400 hover:text-crab-400" />
+                  ) : (
+                    <PanelLeftClose size={16} className="text-shell-500 hover:text-crab-400" />
                   )}
-                </div>
-              ) : (
-                // Expanded: starred files list
-                <div className="border-b border-shell-800 py-2">
-                  {[...starredPaths].map((filePath) => {
-                    const fileName = filePath.split('/').pop() || filePath
-                    const ext = fileName.includes('.') ? '.' + fileName.split('.').pop() : ''
-                    const isSelected = selectedPath === filePath
-                    return (
-                      <div
-                        key={filePath}
-                        className={`group flex items-center gap-2 px-4 py-1.5 cursor-pointer transition-colors ${
-                          isSelected
-                            ? 'bg-crab-500/20 text-crab-400'
-                            : 'text-gray-300 hover:bg-shell-800 hover:text-gray-100'
-                        }`}
-                        onClick={() => handleSelect(filePath, 'file')}
-                      >
-                        <FileText
-                          size={14}
-                          className={`shrink-0 ${
-                            ext === '.md' ? 'text-crab-400' : 'text-shell-500'
-                          }`}
-                        />
-                        <span className="font-console text-sm truncate flex-1">
-                          {fileName}
-                        </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Starred files section */}
+            {starredPaths.size > 0 && (
+              <>
+                {sidebarCollapsed ? (
+                  // Collapsed: stacked file icons
+                  <div className="flex flex-col items-center gap-1 py-2 border-b border-shell-800">
+                    {[...starredPaths].slice(0, 5).map((filePath) => {
+                      const fileName = filePath.split('/').pop() || filePath
+                      const isSelected = selectedPath === filePath
+                      return (
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleStar(filePath)
-                          }}
-                          className="text-yellow-400 hover:text-yellow-300 shrink-0"
-                          title="Unstar file"
+                          key={filePath}
+                          onClick={() => handleSelect(filePath, 'file')}
+                          className={`relative p-1.5 rounded transition-colors ${isSelected ? 'bg-crab-500/20' : 'hover:bg-shell-800'
+                            }`}
+                          title={fileName}
                         >
-                          <Star size={14} fill="currentColor" />
+                          <FileText
+                            size={16}
+                            className={isSelected ? 'text-crab-400' : 'text-shell-500'}
+                          />
+                          <Star
+                            size={8}
+                            fill="currentColor"
+                            className="absolute -top-0.5 -right-0.5 text-yellow-400"
+                          />
                         </button>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </>
-          )}
+                      )
+                    })}
+                    {starredPaths.size > 5 && (
+                      <span className="text-[11px] text-shell-500">+{starredPaths.size - 5}</span>
+                    )}
+                  </div>
+                ) : (
+                  // Expanded: starred files list
+                  <div className="border-b border-shell-800 py-2">
+                    {[...starredPaths].map((filePath) => {
+                      const fileName = filePath.split('/').pop() || filePath
+                      const ext = fileName.includes('.') ? '.' + fileName.split('.').pop() : ''
+                      const isSelected = selectedPath === filePath
+                      return (
+                        <div
+                          key={filePath}
+                          className={`group flex items-center gap-2 px-4 py-1.5 cursor-pointer transition-colors ${isSelected
+                              ? 'bg-crab-500/20 text-crab-400'
+                              : 'text-gray-300 hover:bg-shell-800 hover:text-gray-100'
+                            }`}
+                          onClick={() => handleSelect(filePath, 'file')}
+                        >
+                          <FileText
+                            size={14}
+                            className={`shrink-0 ${ext === '.md' ? 'text-crab-400' : 'text-shell-500'
+                              }`}
+                          />
+                          <span className="font-console text-sm truncate flex-1">
+                            {fileName}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleStar(filePath)
+                            }}
+                            className="text-yellow-400 hover:text-yellow-300 shrink-0"
+                            title="Unstar file"
+                          >
+                            <Star size={14} fill="currentColor" />
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </>
+            )}
 
-             {/* File tree */}
-           {!sidebarCollapsed && (
-             <div className="flex-1 overflow-y-auto overflow-x-hidden py-2">
-               {pathValid ? (
-                 <FileTree
-                   entries={rootEntries}
-                   selectedPath={selectedPath}
-                   onSelect={handleSelect}
-                   onLoadDirectory={handleLoadDirectory}
-                   onContextMenu={handleContextMenu}
-                   onCreateFile={handleCreateFileInFolder}
-                 />
-               ) : (
-                <div className="p-4 text-center">
-                  <p className="font-console text-xs text-shell-500">
-                    Enter a workspace path to browse files
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+            {/* File tree */}
+            {!sidebarCollapsed && (
+              <div className="flex-1 overflow-y-auto overflow-x-hidden py-2">
+                {pathValid ? (
+                  <FileTree
+                    entries={rootEntries}
+                    selectedPath={selectedPath}
+                    onSelect={handleSelect}
+                    onLoadDirectory={handleLoadDirectory}
+                    onContextMenu={handleContextMenu}
+                    onCreateFile={handleCreateFileInFolder}
+                  />
+                ) : (
+                  <div className="p-4 text-center">
+                    <p className="font-console text-xs text-shell-500">
+                      Enter a workspace path to browse files
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
-           {/* Sidebar footer */}
-          {pathValid && !sidebarCollapsed && (
-            <div className="px-4 py-2 border-t border-shell-800">
-              <p className="font-console text-[11px] text-shell-600 truncate">
-                {workspacePath}
-              </p>
-            </div>
-          )}
-        </motion.div>
+            {/* Sidebar footer */}
+            {pathValid && !sidebarCollapsed && (
+              <div className="px-4 py-2 border-t border-shell-800">
+                <p className="font-console text-[11px] text-shell-600 truncate">
+                  {workspacePath}
+                </p>
+              </div>
+            )}
+          </motion.div>
         )}
 
-         {/* Main content area */}
+        {/* Main content area */}
         <div className={`flex-1 relative bg-shell-950 ${isMobile ? 'pb-20' : ''}`}>
           <FileEditor
             content={selectedFileContent}

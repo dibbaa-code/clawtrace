@@ -26,6 +26,7 @@ import {
   MobileMonitorToolbar,
 } from '~/components/monitor'
 import { CrabIdleAnimation } from '~/components/ani'
+import { PixelWaves } from '~/components/effects/PixelWaves'
 import { useIsMobile } from '~/hooks/useIsMobile'
 
 export const Route = createFileRoute('/monitor/')({
@@ -444,9 +445,9 @@ function MonitorPage() {
   return (
     <div className="h-screen flex flex-col bg-shell-950 text-white overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative">
+      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative border-b border-crab-500/20">
         {/* Gradient accent */}
-        <div className="absolute inset-0 bg-linear-to-r from-crab-950/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-crab-500/10 via-transparent to-transparent pointer-events-none" />
 
         <div className="relative flex items-center gap-4">
           <Link
@@ -459,9 +460,12 @@ function MonitorPage() {
           {/* Navigation tabs */}
           <NavTabs />
 
-          {/* Connection status */}
-          <div className="flex items-center gap-2 ml-2">
+          {/* Status text */}
+          <div className="flex items-center gap-3 px-3 py-2 bg-crab-500/10 border border-crab-500/20 rounded-lg">
             <StatusIndicator status={connecting ? 'thinking' : connected ? 'active' : 'idle'} />
+            <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">
+              Monitor Active
+            </span>
           </div>
         </div>
 
@@ -499,11 +503,10 @@ function MonitorPage() {
           {/* Persistence indicator */}
           <button
             onClick={() => setSettingsOpen(true)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${
-              persistenceEnabled
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${persistenceEnabled
                 ? 'bg-neon-mint/10 hover:bg-neon-mint/20'
                 : 'bg-shell-800/50 hover:bg-shell-700'
-            }`}
+              }`}
             title={persistenceEnabled ? 'Background service running' : 'Background service stopped'}
           >
             <HardDrive
@@ -516,15 +519,15 @@ function MonitorPage() {
           </button>
 
           {/* Stats display */}
-          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-shell-800/50 rounded-lg">
+          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-crab-500/10 border border-crab-500/20 rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="font-console text-[11px] text-shell-500 uppercase">Sessions</span>
-              <span className="font-display text-sm text-neon-mint">{sessions.length}</span>
+              <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Streams</span>
+              <span className="font-display text-sm text-neon-cyan font-bold">{sessions.length}</span>
             </div>
-            <div className="w-px h-4 bg-shell-700" />
+            <div className="w-px h-4 bg-crab-500/30" />
             <div className="flex items-center gap-2">
-              <span className="font-console text-[11px] text-shell-500 uppercase">Actions</span>
-              <span className="font-display text-sm text-neon-peach">{actions.length}</span>
+              <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Events</span>
+              <span className="font-display text-sm text-neon-peach font-bold">{actions.length}</span>
             </div>
           </div>
 
@@ -614,6 +617,9 @@ function MonitorPage() {
           />
         </>
       )}
+
+      {/* Diagonal pixel wave effect in corner */}
+      <PixelWaves />
     </div>
   )
 }

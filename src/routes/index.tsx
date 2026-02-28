@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { Github, FolderOpen } from 'lucide-react'
+import { Github, Activity, Terminal, FolderOpen } from 'lucide-react'
+import { PixelWaves } from '~/components/effects/PixelWaves'
+import { CrabIdleAnimation } from '~/components/ani'
 import { version } from '../../package.json'
-import { CrabIdleAnimation, CrabJumpAnimation, CrabAttackAnimation } from '~/components/ani'
 
 function XIcon({ size = 14, className }: { size?: number; className?: string }) {
   return (
@@ -21,160 +21,121 @@ function XIcon({ size = 14, className }: { size?: number; className?: string }) 
   )
 }
 
-// All crab animation frames to preload
-const ALL_CRAB_FRAMES = [
-  ...Array.from({ length: 5 }, (_, i) => `/ani/crab-idle/Crab${i + 1}.png`),
-  ...Array.from({ length: 4 }, (_, i) => `/ani/crab-jump/CrabMoving${i + 1}.png`),
-  ...Array.from({ length: 4 }, (_, i) => `/ani/crab-attack/Crab_Attack${i + 1}.png`),
-]
-
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
-type CrabState = 'idle' | 'jumping' | 'attacking'
-
 function Home() {
-  const [crabState, setCrabState] = useState<CrabState>('idle')
-  const [isHovering, setIsHovering] = useState(false)
-
-  // Preload all crab animation frames on mount
-  useEffect(() => {
-    for (const src of ALL_CRAB_FRAMES) {
-      const img = new Image()
-      img.src = src
-    }
-  }, [])
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovering(true)
-    if (crabState !== 'attacking') {
-      setCrabState('jumping')
-    }
-  }, [crabState])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false)
-    if (crabState !== 'attacking') {
-      setCrabState('idle')
-    }
-  }, [crabState])
-
-  const handleClick = useCallback(() => {
-    setCrabState('attacking')
-    // Attack animation: 4 frames at 10fps = 400ms
-    setTimeout(() => {
-      setCrabState(isHovering ? 'jumping' : 'idle')
-    }, 400)
-  }, [isHovering])
-
   return (
-    <div className="min-h-screen bg-shell-950 texture-grid relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-linear-to-br from-crab-950/20 via-transparent to-shell-950" />
-      <div className="absolute top-0 left-0 w-96 h-96 bg-crab-600/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-neon-coral/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
+    <div className="min-h-screen bg-shell-950 texture-dots relative overflow-hidden">
+      {/* Subtle background gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-crab-950/10 via-transparent to-shell-950" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-crab-600/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-neon-coral/3 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
       {/* Main content */}
       <div className="relative flex items-center justify-center min-h-screen px-4">
-        <div className="text-center max-w-2xl">
-          {/* Interactive animated crab with glow */}
+        <div className="text-center max-w-3xl">
+          {/* Floating crab mascot */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 180, damping: 18 }}
+            className="mb-10"
           >
-            <div
-              className="relative inline-block cursor-pointer select-none"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onClick={handleClick}
-            >
+            <div className="relative inline-block animate-float">
               <div className="crab-icon-glow">
-                {crabState === 'idle' && <CrabIdleAnimation className="w-32 h-32" />}
-                {crabState === 'jumping' && <CrabJumpAnimation className="w-32 h-32" />}
-                {crabState === 'attacking' && <CrabAttackAnimation className="w-32 h-32" />}
+                <CrabIdleAnimation className="w-32 h-32" />
               </div>
               <motion.div
                 className="absolute inset-0 flex items-center justify-center -z-10"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <div className="w-24 h-24 rounded-full bg-crab-500/20 blur-xl" />
+                <div className="w-20 h-20 rounded-full bg-crab-500/20 blur-2xl" />
+                <div className="w-24 h-24 rounded-full bg-neon-cyan/10 blur-3xl absolute" />
               </motion.div>
             </div>
           </motion.div>
 
-          {/* Arcade-style headline */}
+          {/* Modern headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="font-arcade text-4xl md:text-5xl text-crab-400 glow-red mb-6 leading-tight"
+            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
+            className="font-arcade text-3xl md:text-4xl text-crab-400 mb-4 leading-tight"
+            style={{ textShadow: '0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(0, 217, 255, 0.2)' }}
           >
-            CLAWTRACE
+            clawtrace
           </motion.h1>
 
-          {/* Subtitle with display font */}
+          {/* Clean subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="font-console font-bold text-lg text-gray-400 mb-4 tracking-wide uppercase"
+            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.15 }}
+            className="font-display text-base text-shell-400 mb-12 tracking-wide"
           >
             Open-Source OpenClaw Companion
           </motion.p>
 
-          {/* Console-style description */}
+          {/* Feature cards */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="font-console text-sm text-shell-500 mb-10 max-w-md mx-auto"
+            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.2 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10 max-w-2xl mx-auto"
           >
-            <span className="text-crab-600">&gt;</span> Real-time AI agent activity monitoring<br />
-            <span className="text-crab-600">&gt;</span> Session tracking & action visualization<br />
-            <span className="text-crab-600">&gt;</span> Workspace file browser & markdown viewer
+            {[
+              { icon: Activity, label: 'Live Activity Feed', color: 'text-neon-mint' },
+              { icon: Terminal, label: 'Session & Action Graph', color: 'text-neon-peach' },
+              { icon: FolderOpen, label: 'Workspace Browser', color: 'text-neon-coral' },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.25 + i * 0.05 }}
+                className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-shell-900/60 border border-shell-800/50 hover:bg-shell-900/80 hover:border-shell-700/50 transition-all"
+              >
+                <item.icon size={22} className={item.color} />
+                <span className="font-display text-xs text-shell-300">{item.label}</span>
+              </motion.div>
+            ))}
           </motion.div>
 
-          {/* CTA Buttons */}
+          {/* CTA buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.4 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <Link to="/monitor" className="btn-retro inline-block rounded-lg font-black!">
+            <Link
+              to="/monitor"
+              className="px-8 py-3 rounded-full bg-crab-500 hover:bg-crab-600 text-white font-display font-semibold text-sm tracking-wide transition-all hover:shadow-lg hover:shadow-crab-500/40 hover:-translate-y-0.5"
+            >
               Launch Monitor
             </Link>
             <Link
               to="/workspace"
-              className="btn-retro btn-retro-secondary inline-flex items-center gap-2 rounded-lg font-black!"
+              className="px-8 py-3 rounded-full bg-transparent text-shell-300 border border-shell-600 hover:border-shell-500 hover:text-white font-display font-semibold text-sm tracking-wide transition-all inline-flex items-center gap-2"
             >
               <FolderOpen size={18} />
               Explore Workspace
             </Link>
           </motion.div>
 
-          {/* Decorative line */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-16 h-px bg-linear-to-r from-transparent via-crab-700/50 to-transparent max-w-xs mx-auto"
-          />
-
-          {/* Version/status badge */}
+          {/* Minimal status indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="mt-6 inline-flex items-center gap-2 px-3 py-1.5 bg-shell-900/80 rounded-full"
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-shell-900/50 rounded-full border border-shell-800/30"
           >
             <span className="w-2 h-2 rounded-full bg-neon-mint animate-pulse" />
-            <span className="font-console font-bold text-[11px] uppercase text-shell-500">
-              system online • v{version}
+            <span className="font-display text-xs text-shell-500">
+              v{version} • system online
             </span>
           </motion.div>
 
@@ -182,8 +143,8 @@ function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.9 }}
-            className="mt-6 flex items-center justify-center gap-6 font-console text-sm"
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mt-8 flex items-center justify-center gap-6 font-display text-sm"
           >
             <a
               href="https://github.com/dibbaa-code/clawtrace"
@@ -206,6 +167,9 @@ function Home() {
           </motion.div>
         </div>
       </div>
+
+      {/* Diagonal pixel wave effect in corner */}
+      <PixelWaves />
     </div>
   )
 }
