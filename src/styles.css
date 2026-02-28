@@ -1,0 +1,440 @@
+/* Google Fonts: Arcade headline + Display */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+@import 'tailwindcss';
+
+/* JetBrains Mono - Local Fonts */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono/JetBrainsMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =============================================================================
+   CLAWTRACE RETRO-FUTURISTIC DESIGN SYSTEM
+   Modern-retro aesthetic inspired by 1980s sci-fi, vintage computing,
+   and red crabs. Bold arcade headlines, console text, warm reds, neon accents.
+============================================================================= */
+
+/* =============================================================================
+   CUSTOM THEME COLORS & DESIGN TOKENS
+============================================================================= */
+@theme {
+  /* Primary Crab Reds */
+  --color-crab-50: #fef2f2;
+  --color-crab-100: #fee2e2;
+  --color-crab-200: #fecaca;
+  --color-crab-300: #fca5a5;
+  --color-crab-400: #f87171;
+  --color-crab-500: #ef4444;
+  --color-crab-600: #dc2626;
+  --color-crab-700: #b91c1c;
+  --color-crab-800: #991b1b;
+  --color-crab-900: #7f1d1d;
+  --color-crab-950: #450a0a;
+
+  /* Shell Dark Backgrounds */
+  --color-shell-950: #0a0a0f;
+  --color-shell-900: #12121a;
+  --color-shell-850: #161620;
+  --color-shell-800: #1a1a26;
+  --color-shell-700: #252535;
+  --color-shell-600: #363650;
+  --color-shell-500: #52526e;
+
+  /* Neon Accents */
+  --color-neon-cyan: #00ffff;
+  --color-neon-magenta: #ff00ff;
+  --color-neon-coral: #ff6b6b;
+  --color-neon-mint: #98ffc8;
+  --color-neon-peach: #ffb088;
+  --color-neon-lavender: #c4b5fd;
+
+  /* Glow Effects */
+  --color-glow-red: rgba(239, 68, 68, 0.5);
+  --color-glow-cyan: rgba(0, 255, 255, 0.4);
+  --color-glow-coral: rgba(255, 107, 107, 0.4);
+
+  /* Pastel Accents */
+  --color-pastel-mint: #a8e6cf;
+  --color-pastel-peach: #ffd3b6;
+  --color-pastel-lavender: #ddd6fe;
+  --color-pastel-sky: #bae6fd;
+
+  /* Fonts */
+  --font-arcade: 'Press Start 2P', monospace;
+  --font-display: 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* =============================================================================
+   BASE STYLES
+============================================================================= */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply m-0 bg-shell-950 text-gray-100;
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
+}
+
+/* Arcade-style headlines */
+.font-arcade {
+  font-family: var(--font-arcade);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Display font for sub-headlines */
+.font-display {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* Console monospace */
+.font-console {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Footer icons */
+.footer-icon-x {
+  display: inline-block;
+  transition: color 200ms ease; /* smooth hover */
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}
+
+/* =============================================================================
+   NEON GLOW EFFECTS
+============================================================================= */
+.glow-red {
+  text-shadow:
+    0 0 5px var(--color-glow-red),
+    0 0 10px var(--color-glow-red),
+    0 0 20px var(--color-glow-red);
+}
+
+.glow-cyan {
+  text-shadow:
+    0 0 5px var(--color-glow-cyan),
+    0 0 10px var(--color-glow-cyan),
+    0 0 20px var(--color-glow-cyan);
+}
+
+.glow-coral {
+  text-shadow:
+    0 0 5px var(--color-glow-coral),
+    0 0 10px var(--color-glow-coral);
+}
+
+.box-glow-red {
+  box-shadow:
+    0 0 10px var(--color-glow-red),
+    0 0 20px rgba(239, 68, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.box-glow-cyan {
+  box-shadow:
+    0 0 10px var(--color-glow-cyan),
+    0 0 20px rgba(0, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* =============================================================================
+   RETRO TEXTURES & PATTERNS
+============================================================================= */
+.texture-scanlines {
+  position: relative;
+}
+
+.texture-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+.texture-grid {
+  background-image:
+    linear-gradient(rgba(255, 107, 107, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 107, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.texture-noise {
+  position: relative;
+}
+
+.texture-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   CHUNKY RETRO BUTTONS
+============================================================================= */
+.btn-retro {
+  @apply relative px-6 py-3 font-display font-semibold text-sm uppercase tracking-wider;
+  @apply bg-crab-600 text-white border-2 border-crab-500;
+  @apply transition-all duration-150;
+  box-shadow:
+    0 4px 0 0 var(--color-crab-800),
+    0 6px 10px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(0);
+}
+
+.btn-retro:hover {
+  @apply bg-crab-500;
+  box-shadow:
+    0 2px 0 0 var(--color-crab-800),
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(2px);
+}
+
+.btn-retro:active {
+  @apply bg-crab-700;
+  box-shadow:
+    0 0 0 0 var(--color-crab-800),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(4px);
+}
+
+/* Secondary button variant */
+.btn-retro-secondary {
+  @apply bg-shell-700 border-shell-600 text-gray-200;
+  box-shadow:
+    0 4px 0 0 var(--color-shell-950),
+    0 6px 10px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.btn-retro-secondary:hover {
+  @apply bg-shell-600;
+  box-shadow:
+    0 2px 0 0 var(--color-shell-950),
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* =============================================================================
+   RETRO PANELS & CARDS
+============================================================================= */
+.panel-retro {
+  @apply bg-shell-900 rounded-lg;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.panel-crab {
+  @apply bg-linear-to-br from-shell-900 to-shell-950 rounded-lg;
+  box-shadow:
+    0 0 30px rgba(239, 68, 68, 0.1),
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* =============================================================================
+   CRAB MOTIF SVG DECORATIONS
+============================================================================= */
+.crab-icon-glow {
+  filter: drop-shadow(0 0 8px var(--color-glow-red));
+}
+
+/* Subtle claw bracket decorations */
+.claw-bracket-left::before {
+  content: '❮';
+  @apply text-crab-600/40 mr-2;
+}
+
+.claw-bracket-right::after {
+  content: '❯';
+  @apply text-crab-600/40 ml-2;
+}
+
+/* =============================================================================
+   SCROLLBAR STYLING
+============================================================================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-shell-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-shell-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-crab-700);
+}
+
+/* =============================================================================
+   SELECTION STYLING
+============================================================================= */
+::selection {
+  background: var(--color-crab-600);
+  color: white;
+}
+
+/* =============================================================================
+   REACTFLOW CUSTOMIZATIONS
+============================================================================= */
+.react-flow__background {
+  background-color: var(--color-shell-950);
+}
+
+.react-flow__controls {
+  background: var(--color-shell-800);
+  border: 2px solid var(--color-shell-700);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.react-flow__controls-button {
+  background: var(--color-shell-800);
+  border: none;
+  color: #9ca3af;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--color-shell-700);
+  color: var(--color-crab-400);
+}
+
+.react-flow__minimap {
+  background: var(--color-shell-900);
+  border: 2px solid var(--color-shell-700);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* =============================================================================
+   ANIMATIONS
+============================================================================= */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-glow-red);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-glow-red), 0 0 30px var(--color-glow-red);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.98; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-flicker {
+  animation: flicker 0.1s ease-in-out infinite;
+}
+
+/* =============================================================================
+   UTILITY EXTENSIONS
+============================================================================= */
+.border-glow-red {
+  border-color: var(--color-crab-500);
+  box-shadow: 0 0 10px var(--color-glow-red);
+}
+
+.border-glow-cyan {
+  border-color: var(--color-neon-cyan);
+  box-shadow: 0 0 10px var(--color-glow-cyan);
+}
+
+/* Status indicator colors */
+.status-active {
+  @apply bg-neon-mint;
+  box-shadow: 0 0 8px rgba(152, 255, 200, 0.6);
+}
+
+.status-thinking {
+  @apply bg-neon-peach;
+  box-shadow: 0 0 8px rgba(255, 176, 136, 0.6);
+}
+
+.status-idle {
+  @apply bg-shell-600;
+}
+
+/* Input styling */
+.input-retro {
+  @apply bg-shell-900 border-2 border-shell-700 rounded-lg px-4 py-2;
+  @apply text-gray-200 placeholder-shell-500 font-mono text-sm;
+  @apply focus:outline-none focus:border-crab-500 focus:ring-2 focus:ring-crab-500/20;
+  @apply transition-all duration-150;
+}
+
+/* Safe area padding for iOS */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
