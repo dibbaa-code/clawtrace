@@ -21,20 +21,19 @@ export function CrabNode({ data }: CrabNodeProps) {
 
       {/* Outer ring */}
       <div
-        className={`absolute w-28 h-28 rounded-full border-2 ${
-          data.active ? 'border-crab-500/40' : 'border-shell-700'
-        }`}
+        className={`absolute w-24 h-24 rounded-full border ${data.active ? 'border-crab-500/30' : 'border-shell-700/50'
+          }`}
         style={{
-          boxShadow: data.active ? '0 0 20px rgba(239, 68, 68, 0.3)' : 'none',
+          boxShadow: data.active ? '0 0 15px rgba(59, 130, 246, 0.2)' : 'none',
         }}
       />
 
-      {/* Lobster icon */}
-      <div className="relative z-10 crab-icon-glow">
+      {/* Cute crab mascot */}
+      <div className="relative z-10">
         <img
-          src="/lobster-smoke.png"
-          alt=""
-          className="w-24 h-24 rounded-full opacity-80 hover:opacity-100 transition-opacity duration-300 animate-pulse"
+          src="/crab-mascot.png"
+          alt="Clawtrace origin"
+          className="w-24 h-24 hover:scale-105 transition-transform duration-300"
           style={{ imageRendering: 'pixelated' }}
           draggable={false}
         />
@@ -45,7 +44,7 @@ export function CrabNode({ data }: CrabNodeProps) {
         position={Position.Bottom}
         className="bg-crab-500! w-4! h-4! border-2! border-shell-900! z-10"
         style={{
-          boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)',
+          boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)',
         }}
       />
     </motion.div>
