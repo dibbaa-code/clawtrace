@@ -1,0 +1,13 @@
+services:
+  clawtrace:
+    image: ghcr.io/dibbaa-code/clawtrace:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - CLAWDBOT_API_TOKEN=${CLAWDBOT_API_TOKEN}
+    volumes:
+      # Mount host workspace directory to container
+      # The container expects the workspace at ~/.openclaw/workspace
+      # Change the host path if your workspace is in a different location
+      - ${WORKSPACE_HOST_PATH:-~/.openclaw/workspace}:/root/.openclaw/workspace
+    restart: unless-stopped
