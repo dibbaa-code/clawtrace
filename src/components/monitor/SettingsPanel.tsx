@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Settings, X, Wifi, WifiOff, RefreshCw, Terminal, Download, Trash2, Database, HardDrive, Play, Square, CloudDownload } from 'lucide-react'
+import { Settings, X, Wifi, WifiOff, RefreshCw, Terminal, Download, Trash2, Database, HardDrive, Play, Square, CloudDownload, Bell } from 'lucide-react'
 import { version } from '../../../package.json'
 
 interface SettingsPanelProps {
@@ -26,6 +27,7 @@ interface SettingsPanelProps {
   onPersistenceStart: () => void
   onPersistenceStop: () => void
   onPersistenceClear: () => void
+  onTestDiscordAlert?: () => Promise<boolean>
 }
 
 export function SettingsPanel({
@@ -52,7 +54,24 @@ export function SettingsPanel({
   onPersistenceStart,
   onPersistenceStop,
   onPersistenceClear,
+  onTestDiscordAlert,
 }: SettingsPanelProps) {
+  const [testAlertLoading, setTestAlertLoading] = useState(false)
+  const [testAlertResult, setTestAlertResult] = useState<'success' | 'error' | null>(null)
+
+  const handleTestAlert = async () => {
+    if (!onTestDiscordAlert) return
+    setTestAlertLoading(true)
+    setTestAlertResult(null)
+    try {
+      const ok = await onTestDiscordAlert()
+      setTestAlertResult(ok ? 'success' : 'error')
+    } catch {
+      setTestAlertResult('error')
+    } finally {
+      setTestAlertLoading(false)
+    }
+  }
 
   return (
     <>
@@ -141,6 +160,38 @@ export function SettingsPanel({
                   </div>
                 </div>
 
+                {/* Discord alerts */}
+                {onTestDiscordAlert && (
+                  <div className="panel-retro p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Bell size={18} className="text-neon-peach" />
+                      <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
+                        Discord Alerts
+                      </span>
+                    </div>
+
+                    <p className="font-console text-[11px] text-shell-500 mb-4">
+                      <span className="text-crab-600">&gt;</span> test webhook configuration
+                    </p>
+
+                    <button
+                      onClick={handleTestAlert}
+                      disabled={testAlertLoading}
+                      className="w-full px-4 py-2 font-display text-xs uppercase tracking-wide bg-neon-peach/20 hover:bg-neon-peach/30 text-neon-peach rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {testAlertLoading ? (
+                        <>Sending...</>
+                      ) : testAlertResult === 'success' ? (
+                        <>Sent – check Discord</>
+                      ) : testAlertResult === 'error' ? (
+                        <>Failed – check webhook URL</>
+                      ) : (
+                        <>Test Alert</>
+                      )}
+                    </button>
+                  </div>
+                )}
+
                 {/* Debug mode toggle */}
                 <div className="panel-retro p-4">
                   <div className="flex items-center gap-3 mb-2">
@@ -156,11 +207,10 @@ export function SettingsPanel({
 
                   <button
                     onClick={() => onDebugModeChange(!debugMode)}
-                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all ${
-                      debugMode
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all ${debugMode
                         ? 'bg-neon-lavender/30 text-neon-lavender'
                         : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
-                    }`}
+                      }`}
                   >
                     {debugMode ? 'Enabled' : 'Disabled'}
                   </button>
@@ -234,11 +284,10 @@ export function SettingsPanel({
                       </div>
                       <button
                         onClick={() => onHistoricalModeChange(!historicalMode)}
-                        className={`px-3 py-1 font-display text-[11px] uppercase tracking-wide rounded transition-all ${
-                          historicalMode
+                        className={`px-3 py-1 font-display text-[11px] uppercase tracking-wide rounded transition-all ${historicalMode
                             ? 'bg-neon-cyan/20 text-neon-cyan'
                             : 'bg-shell-800 text-gray-500 hover:bg-shell-700'
-                        }`}
+                          }`}
                       >
                         {historicalMode ? 'On' : 'Off'}
                       </button>
@@ -270,11 +319,10 @@ export function SettingsPanel({
 
                   <button
                     onClick={() => onLogCollectionChange(!logCollection)}
-                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all mb-2 ${
-                      logCollection
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all mb-2 ${logCollection
                         ? 'bg-neon-mint/20 text-neon-mint'
                         : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
-                    }`}
+                      }`}
                   >
                     {logCollection ? 'Recording...' : 'Start Recording'}
                   </button>

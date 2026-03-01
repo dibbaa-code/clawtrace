@@ -150,6 +150,13 @@ export interface SessionInfo {
   spawnedBy?: string
 }
 
+// Threat analysis (from LLM)
+export interface ThreatInfo {
+  malicious: boolean
+  severity?: 'low' | 'medium' | 'high' | 'critical'
+  reason?: string
+}
+
 // App-level types
 export interface MonitorSession {
   key: string
@@ -181,6 +188,9 @@ export interface MonitorAction {
   inputTokens?: number
   outputTokens?: number
   stopReason?: string
+  // Threat analysis
+  traceId?: string
+  threat?: ThreatInfo
 }
 
 export type MonitorExecEventType = 'started' | 'output' | 'completed'
@@ -201,6 +211,8 @@ export interface MonitorExecEvent {
   exitCode?: number
   status?: string
   timestamp: number
+  traceId?: string
+  threat?: ThreatInfo
 }
 
 export type MonitorExecProcessStatus = 'running' | 'completed' | 'failed'
@@ -228,6 +240,8 @@ export interface MonitorExecProcess {
   outputTruncated?: boolean
   timestamp: number
   lastActivityAt: number
+  traceId?: string
+  threat?: ThreatInfo
 }
 
 // Utility functions

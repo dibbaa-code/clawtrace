@@ -35,6 +35,7 @@ interface ActionGraphProps {
   execs: MonitorExecProcess[]
   selectedSession: string | null
   onSessionSelect: (key: string | null) => void
+  traceId?: string
 }
 
 /** Cast domain data to ReactFlow's Node data type */
@@ -82,6 +83,7 @@ function ActionGraphInner({
   execs,
   selectedSession,
   onSessionSelect,
+  traceId,
 }: ActionGraphProps) {
   // Crab AI state
   const crabRef = useRef<CrabAI>({
@@ -107,7 +109,7 @@ function ActionGraphInner({
   const isAnimatingRef = useRef(false)
 
   // Get ReactFlow instance for viewport control
-  const { setCenter } = useReactFlow()
+  const { setCenter, getNodes } = useReactFlow()
 
   // Detect manual panning and auto-disable follow mode
   useOnViewportChange({
@@ -117,6 +119,27 @@ function ActionGraphInner({
       }
     }, [followMode]),
   })
+
+  // Deep link: focus on node with matching traceId
+  useEffect(() => {
+    if (!traceId || !setCenter || !getNodes) return
+    const action = actions.find((a) => a.traceId === traceId)
+    const exec = execs.find((e) => e.traceId === traceId)
+    const nodeId = action ? `action-${action.id}` : exec ? `exec-${exec.id}` : null
+    if (!nodeId) return
+
+    const timer = setTimeout(() => {
+      const nodes = getNodes()
+      const node = nodes.find((n) => n.id === nodeId)
+      if (node?.position) {
+        const x = node.position.x + (node.measured?.width ?? 110) / 2
+        const y = node.position.y + (node.measured?.height ?? 50) / 2
+        setCenter(x, y, { zoom: 1.2, duration: 400 })
+      }
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [traceId, actions, execs, setCenter, getNodes])
 
   // Filter actions for selected session, or show all if none selected
   const visibleActions = useMemo(() => {
@@ -385,7 +408,7 @@ function ActionGraphInner({
       data: {
         state: crab.state,
         facingLeft: crab.facingLeft,
-        onClick: () => {}, // Placeholder, updated after setNodes is available
+        onClick: () => { }, // Placeholder, updated after setNodes is available
       },
       draggable: false,
       selectable: false,
@@ -430,12 +453,12 @@ function ActionGraphInner({
       nds.map((n) =>
         n.id === CHASER_CRAB_ID
           ? {
-              ...n,
-              data: {
-                ...n.data,
-                state: 'jumping',
-              },
-            }
+            ...n,
+            data: {
+              ...n.data,
+              state: 'jumping',
+            },
+          }
           : n
       )
     )
@@ -455,12 +478,12 @@ function ActionGraphInner({
         nds.map((n) =>
           n.id === CHASER_CRAB_ID
             ? {
-                ...n,
-                data: {
-                  ...n.data,
-                  state: crab.state,
-                },
-              }
+              ...n,
+              data: {
+                ...n.data,
+                state: crab.state,
+              },
+            }
             : n
         )
       )
@@ -498,7 +521,7 @@ function ActionGraphInner({
         const prevPos = prevPositions.get(node.id)
         if (prevPos) {
           const moved = Math.abs(prevPos.x - node.position.x) > 5 ||
-                       Math.abs(prevPos.y - node.position.y) > 5
+            Math.abs(prevPos.y - node.position.y) > 5
           if (moved && (crab.state === 'idle' || crab.target?.nodeId === node.id)) {
             crab.target = { ...nodeCenter, nodeId: node.id }
             crab.state = 'chasing'
@@ -671,14 +694,14 @@ function ActionGraphInner({
           nds.map((n) =>
             n.id === CHASER_CRAB_ID
               ? {
-                  ...n,
-                  position: { ...crab.position },
-                  data: {
-                    state: crab.state,
-                    facingLeft: crab.facingLeft,
-                    onClick: handleCrabClick,
-                  },
-                }
+                ...n,
+                position: { ...crab.position },
+                data: {
+                  state: crab.state,
+                  facingLeft: crab.facingLeft,
+                  onClick: handleCrabClick,
+                },
+              }
               : n
           )
         )
@@ -787,11 +810,10 @@ function ActionGraphInner({
           <button
             onClick={() => setFollowMode((prev) => !prev)}
             title={followMode ? 'Following new nodes (click to disable)' : 'Follow new nodes'}
-            className={`p-1.5 rounded border shadow-lg cursor-pointer transition-colors ${
-              followMode
+            className={`p-1.5 rounded border shadow-lg cursor-pointer transition-colors ${followMode
                 ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan backdrop-blur-lg'
                 : 'bg-shell-800 border-shell-700 text-gray-300 hover:bg-shell-700'
-            }`}
+              }`}
           >
             <Crosshair className="w-4 h-4" />
           </button>

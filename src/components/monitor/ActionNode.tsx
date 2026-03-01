@@ -10,6 +10,7 @@ import {
   MessageSquare,
   MessageCircle,
   Bot,
+  AlertTriangle,
 } from 'lucide-react'
 import type { MonitorAction } from '~/integrations/openclaw'
 
@@ -135,6 +136,8 @@ export const ActionNode = memo(function ActionNode({
   // Metadata for complete nodes
   const hasMetadata = data.type === 'complete' && (data.duration || data.inputTokens || data.outputTokens)
 
+  const isMalicious = data.threat?.malicious
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -143,13 +146,18 @@ export const ActionNode = memo(function ActionNode({
       onClick={() => setExpanded(!expanded)}
       className={`
         px-3 py-2.5 rounded-lg border-2 min-w-[180px] cursor-pointer
-        bg-shell-900 ${state.borderColor}
+        bg-shell-900
+        ${isMalicious ? 'border-crab-500 bg-crab-950/30' : state.borderColor}
         ${selected ? 'ring-2 ring-white/30' : ''}
         ${expanded ? 'max-w-[600px]' : 'max-w-[300px]'}
         transition-all duration-150 hover:bg-shell-800
       `}
       style={{
-        boxShadow: selected ? '0 0 15px rgba(239, 68, 68, 0.3)' : '0 4px 12px rgba(0, 0, 0, 0.3)',
+        boxShadow: isMalicious
+          ? '0 0 12px rgba(239, 68, 68, 0.4)'
+          : selected
+            ? '0 0 15px rgba(59, 130, 246, 0.3)'
+            : '0 4px 12px rgba(0, 0, 0, 0.3)',
       }}
     >
       <Handle type="target" position={Position.Top} className="bg-shell-600! w-2! h-2! border-shell-800!" />
@@ -166,9 +174,25 @@ export const ActionNode = memo(function ActionNode({
         />
       </div>
 
+      {/* Threat badge */}
+      {isMalicious && (
+        <div className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded bg-crab-900/50 border border-crab-700/50">
+          <AlertTriangle size={12} className="text-crab-400" />
+          <span className="font-console text-[11px] text-crab-300">
+            {data.threat?.severity ?? 'malicious'}
+            {data.threat?.reason && `: ${data.threat.reason}`}
+          </span>
+        </div>
+      )}
+
       {/* Timestamp */}
       <div className="font-console text-xs text-shell-500 mb-1.5">
         <span className="text-crab-600">&gt;</span> {formatTime(data.timestamp)}
+        {data.traceId && (
+          <span className="ml-2 text-shell-600" title={`Trace: ${data.traceId}`}>
+            #{data.traceId}
+          </span>
+        )}
       </div>
 
       {/* Metadata for complete nodes */}

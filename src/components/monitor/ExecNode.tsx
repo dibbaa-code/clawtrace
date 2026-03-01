@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Copy, Check, Loader2, Terminal, XCircle } from 'lucide-react'
+import { CheckCircle, Copy, Check, Loader2, Terminal, XCircle, AlertTriangle } from 'lucide-react'
 import type { MonitorExecProcess, MonitorExecOutputChunk } from '~/integrations/openclaw'
 
 interface ExecNodeProps {
@@ -85,10 +85,11 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
 
   const preview = useMemo(() => tailLinesFromChunks(data.outputs, 3), [data.outputs])
   const hasOutput = data.outputs.length > 0
+  const isMalicious = data.threat?.malicious
 
   const handleCopyPid = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
-    navigator.clipboard.writeText(String(data.pid)).catch(() => {})
+    navigator.clipboard.writeText(String(data.pid)).catch(() => { })
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
   }, [data.pid])
@@ -108,15 +109,18 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
       onClick={() => setExpanded((prev) => !prev)}
       className={`
         px-3 py-2.5 rounded-lg border-2 min-w-[220px] cursor-pointer
-        bg-shell-900 ${status.borderColor}
+        bg-shell-900
+        ${isMalicious ? 'border-crab-500 bg-crab-950/30' : status.borderColor}
         ${selected ? 'ring-2 ring-white/30' : ''}
         ${expanded ? 'max-w-[680px]' : 'max-w-[360px]'}
         transition-all duration-150 hover:bg-shell-800
       `}
       style={{
-        boxShadow: selected
-          ? '0 0 15px rgba(239, 68, 68, 0.3)'
-          : '0 4px 12px rgba(0, 0, 0, 0.35)',
+        boxShadow: isMalicious
+          ? '0 0 12px rgba(239, 68, 68, 0.4)'
+          : selected
+            ? '0 0 15px rgba(59, 130, 246, 0.3)'
+            : '0 4px 12px rgba(0, 0, 0, 0.35)',
       }}
     >
       <Handle
@@ -176,8 +180,24 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
         </div>
       </div>
 
+      {/* Threat badge */}
+      {isMalicious && (
+        <div className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded bg-crab-900/50 border border-crab-700/50">
+          <AlertTriangle size={12} className="text-crab-400" />
+          <span className="font-console text-[11px] text-crab-300">
+            {data.threat?.severity ?? 'malicious'}
+            {data.threat?.reason && `: ${data.threat.reason}`}
+          </span>
+        </div>
+      )}
+
       <div className="font-console text-xs text-shell-500 mb-1.5">
         <span className="text-crab-600">&gt;</span> {formatTime(data.lastActivityAt)}
+        {data.traceId && (
+          <span className="ml-2 text-shell-600" title={`Trace: ${data.traceId}`}>
+            #{data.traceId}
+          </span>
+        )}
       </div>
 
       <div className="font-console text-xs text-shell-400 mb-1.5 flex gap-2 flex-wrap">

@@ -23,6 +23,9 @@ import {
   type DirectoryEntry,
   type FileContent,
 } from '~/lib/workspace-fs'
+import { nanoid } from 'nanoid'
+import { analyzeThreat } from '~/lib/threat-analyzer'
+import { sendDiscordAlert } from '~/lib/alert-service'
 
 // Server-side debug mode state
 let debugMode = false
@@ -95,6 +98,20 @@ const openclawRouter = router({
 
   gatewayEndpoint: publicProcedure.query(() => {
     return { url: getClawdbotEndpoint() }
+  }),
+
+  testDiscordAlert: publicProcedure.mutation(async () => {
+    const ok = await sendDiscordAlert({
+      traceId: 'test-' + Date.now(),
+      threat: {
+        malicious: true,
+        severity: 'high',
+        reason: 'This is a test alert from Clawtrace. Your Discord webhook is configured correctly.',
+      },
+      summary: 'Test alert – verify your webhook is working',
+      eventType: 'action',
+    })
+    return { sent: ok }
   }),
 
   setDebugMode: publicProcedure
@@ -186,7 +203,7 @@ const openclawRouter = router({
       const client = getClawdbotClient()
       const persistence = getPersistenceService()
 
-      const unsubscribe = client.onEvent((event) => {
+      const unsubscribe = client.onEvent(async (event) => {
         // Collect raw event when log collection is enabled
         if (collectLogs) {
           collectedEvents.push({
@@ -201,24 +218,64 @@ const openclawRouter = router({
         }
 
         const parsed = parseEventFrame(event)
-        if (parsed) {
-          if (debugMode && parsed.action) {
-            console.log('[DEBUG] Parsed action:', parsed.action.type, parsed.action.eventType, 'sessionKey:', parsed.action.sessionKey)
+        if (!parsed) return
+
+        if (debugMode && parsed.action) {
+          console.log('[DEBUG] Parsed action:', parsed.action.type, parsed.action.eventType, 'sessionKey:', parsed.action.sessionKey)
+        }
+        if (debugMode && parsed.execEvent) {
+          console.log('[DEBUG] Parsed exec:', parsed.execEvent.eventType, 'runId:', parsed.execEvent.runId, 'pid:', parsed.execEvent.pid)
+        }
+
+        // Generate trace ID for action/exec events
+        const traceId = nanoid(12)
+        const hasAction = !!parsed.action
+        const hasExec = !!parsed.execEvent
+
+        // Run LLM threat analysis before emitting (only for actions and exec events)
+        let threat = { malicious: false as boolean, severity: undefined as 'low' | 'medium' | 'high' | 'critical' | undefined, reason: undefined as string | undefined }
+        if (hasAction || hasExec) {
+          threat = await analyzeThreat(parsed.action, parsed.execEvent)
+        }
+
+        // Enrich and emit - only after LLM returns
+        if (parsed.session) {
+          emit.next({ type: 'session', session: parsed.session })
+        }
+        if (parsed.action) {
+          const enrichedAction: MonitorAction = {
+            ...parsed.action,
+            traceId,
+            threat: hasAction ? threat : undefined,
           }
-          if (debugMode && parsed.execEvent) {
-            console.log('[DEBUG] Parsed exec:', parsed.execEvent.eventType, 'runId:', parsed.execEvent.runId, 'pid:', parsed.execEvent.pid)
+          persistence.addAction(enrichedAction)
+          emit.next({ type: 'action', action: enrichedAction })
+
+          if (threat.malicious) {
+            sendDiscordAlert({
+              traceId,
+              threat,
+              summary: `Action: ${parsed.action.type} ${parsed.action.toolName ?? ''} ${parsed.action.content?.slice(0, 100) ?? ''}`,
+              eventType: 'action',
+            }).catch((err) => console.error('[openclaw] Discord alert failed:', err))
           }
-          if (parsed.session) {
-            emit.next({ type: 'session', session: parsed.session })
+        }
+        if (parsed.execEvent) {
+          const enrichedExec: MonitorExecEvent = {
+            ...parsed.execEvent,
+            traceId,
+            threat: hasExec ? threat : undefined,
           }
-          if (parsed.action) {
-            // Persist action if service is enabled
-            persistence.addAction(parsed.action)
-            emit.next({ type: 'action', action: parsed.action })
-          }
-          if (parsed.execEvent) {
-            persistence.addExecEvent(parsed.execEvent)
-            emit.next({ type: 'exec', execEvent: parsed.execEvent })
+          persistence.addExecEvent(enrichedExec)
+          emit.next({ type: 'exec', execEvent: enrichedExec })
+
+          if (threat.malicious) {
+            sendDiscordAlert({
+              traceId,
+              threat,
+              summary: `Exec: ${parsed.execEvent.command ?? 'unknown'} (${parsed.execEvent.eventType})`,
+              eventType: 'exec',
+            }).catch((err) => console.error('[openclaw] Discord alert failed:', err))
           }
         }
       })

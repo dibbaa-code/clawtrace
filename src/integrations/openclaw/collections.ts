@@ -187,6 +187,8 @@ function createPlaceholderExec(event: MonitorExecEvent, sessionKey?: string): Mo
     timestamp: startedAt,
     outputs: [],
     lastActivityAt: event.timestamp,
+    traceId: event.traceId,
+    threat: event.threat,
   }
 }
 
@@ -271,6 +273,8 @@ export function addAction(action: MonitorAction) {
         if (action.outputTokens !== undefined) draft.outputTokens = action.outputTokens
         if (action.stopReason) draft.stopReason = action.stopReason
         if (action.endedAt) draft.endedAt = action.endedAt
+        if (action.traceId) draft.traceId = action.traceId
+        if (action.threat) draft.threat = action.threat
 
         // Calculate duration if we have both timestamps
         if (draft.startedAt && action.endedAt) {
@@ -278,7 +282,7 @@ export function addAction(action: MonitorAction) {
         }
       })
     } else {
-      // Create new action node
+      // Create new action node (includes traceId, threat from action)
       actionsCollection.insert({
         ...action,
         id: actionNodeId,
@@ -309,6 +313,8 @@ export function addExecEvent(event: MonitorExecEvent) {
         draft.startedAt = event.startedAt ?? draft.startedAt ?? event.timestamp
         draft.timestamp = draft.startedAt
         draft.lastActivityAt = event.timestamp
+        if (event.traceId) draft.traceId = event.traceId
+        if (event.threat) draft.threat = event.threat
       })
       return
     }
@@ -337,6 +343,8 @@ export function addExecEvent(event: MonitorExecEvent) {
         draft.sessionId = event.sessionId || draft.sessionId
         draft.sessionKey = sessionKey || draft.sessionKey
         draft.lastActivityAt = event.timestamp
+        if (event.traceId) draft.traceId = event.traceId
+        if (event.threat) draft.threat = event.threat
         if (text) {
           const capped = capExecOutputs([...draft.outputs, chunk])
           draft.outputs = capped.outputs
@@ -371,6 +379,8 @@ export function addExecEvent(event: MonitorExecEvent) {
         draft.completedAt = completedAt
         draft.status = completedStatus
         draft.lastActivityAt = event.timestamp
+        if (event.traceId) draft.traceId = event.traceId
+        if (event.threat) draft.threat = event.threat
       })
       return
     }

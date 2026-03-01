@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useSearch } from '@tanstack/react-router'
 import { useLiveQuery } from '@tanstack/react-db'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Loader2, HardDrive, Trash2 } from 'lucide-react'
@@ -102,6 +102,10 @@ function MonitorPage() {
   // Mobile state
   const isMobile = useIsMobile()
   const [sessionDrawerOpen, setSessionDrawerOpen] = useState(false)
+
+  // Deep link: ?trace=xxx to focus on event
+  const search = useSearch({ strict: false }) as { trace?: string }
+  const traceId = search?.trace ?? undefined
 
   // Live queries from TanStack DB collections
   const sessionsQuery = useLiveQuery(sessionsCollection)
@@ -353,6 +357,16 @@ function MonitorPage() {
     }
   }
 
+  const handleTestDiscordAlert = async (): Promise<boolean> => {
+    try {
+      const result = await trpc.openclaw.testDiscordAlert.mutate()
+      return result.sent
+    } catch (e) {
+      console.error('Test Discord alert failed:', e)
+      return false
+    }
+  }
+
   // Poll log count while collecting
   useEffect(() => {
     if (!logCollection) return
@@ -504,8 +518,8 @@ function MonitorPage() {
           <button
             onClick={() => setSettingsOpen(true)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${persistenceEnabled
-                ? 'bg-neon-mint/10 hover:bg-neon-mint/20'
-                : 'bg-shell-800/50 hover:bg-shell-700'
+              ? 'bg-neon-mint/10 hover:bg-neon-mint/20'
+              : 'bg-shell-800/50 hover:bg-shell-700'
               }`}
             title={persistenceEnabled ? 'Background service running' : 'Background service stopped'}
           >
@@ -555,6 +569,7 @@ function MonitorPage() {
             onPersistenceStart={handlePersistenceStart}
             onPersistenceStop={handlePersistenceStop}
             onPersistenceClear={handlePersistenceClear}
+            onTestDiscordAlert={handleTestDiscordAlert}
           />
         </div>
       </header>
@@ -591,6 +606,7 @@ function MonitorPage() {
             execs={execs}
             selectedSession={selectedSession}
             onSessionSelect={setSelectedSession}
+            traceId={traceId}
           />
         </div>
       </div>
