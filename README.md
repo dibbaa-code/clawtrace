@@ -1,4 +1,5 @@
 # 🦀 Clawtrace
+<img width="656" height="302" alt="Screenshot 2026-03-01 at 11 53 05 AM" src="https://github.com/user-attachments/assets/dad73ab4-3e30-4632-8abb-8746e8c16a96" />
 
 Real-time companion monitor for [OpenClaw (Clawdbot)](https://github.com/openclaw/openclaw) agents by [@dibbaa-code](https://x.com/dibbaa-code).
 
