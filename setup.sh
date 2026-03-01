@@ -149,6 +149,7 @@ echo -e "${CYAN}  Building & starting clawtrace...${NC}"
 echo ""
 
 cd "$INSTALL_DIR"
+docker builder prune --filter type=source.git -f 2>/dev/null || true
 docker compose build --no-cache
 docker compose up -d
 
