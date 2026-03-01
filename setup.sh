@@ -19,23 +19,23 @@ for arg in "$@"; do
   esac
 done
 
-# Require OPENAI_API_KEY
-if [ -z "$OPENAI_API_KEY" ]; then
-  echo ""
-  echo -e "${RED}  Missing OPENAI_API_KEY${NC}"
-  echo ""
-  echo "  Usage:"
-  echo "    bash setup.sh OPENAI_API_KEY=sk-proj-..."
-  echo ""
-  echo "  Optional:"
-  echo "    DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/..."
-  echo "    CLAWTRACE_BASE_URL=http://your-ip:3000"
-  echo ""
-  echo "  With curl:"
-  echo "    curl -fsSL https://raw.githubusercontent.com/dibbaa-code/clawtrace/main/setup.sh | bash -s -- OPENAI_API_KEY=<your-key> DISCORD_WEBHOOK_URL=<your-webhook> CLAWTRACE_BASE_URL=<your-url>"
-  echo ""
-  exit 1
-fi
+# All params are optional — show usage with -h/--help
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help)
+      echo ""
+      echo "  Usage:"
+      echo "    bash setup.sh [OPENAI_API_KEY=sk-proj-...] [DISCORD_WEBHOOK_URL=...] [CLAWTRACE_BASE_URL=...]"
+      echo ""
+      echo "  With curl:"
+      echo "    curl -fsSL https://raw.githubusercontent.com/dibbaa-code/clawtrace/main/setup.sh | bash -s -- OPENAI_API_KEY=<key>"
+      echo ""
+      echo "  All params are optional. Only gateway token and port are required (auto-detected)."
+      echo ""
+      exit 0
+      ;;
+  esac
+done
 
 echo ""
 echo -e "${CYAN}  clawtrace setup${NC}"
@@ -110,6 +110,11 @@ fi
 
 # Build optional env lines
 OPTIONAL_ENV=""
+if [ -n "$OPENAI_API_KEY" ]; then
+  OPTIONAL_ENV="${OPTIONAL_ENV}      - OPENAI_API_KEY=${OPENAI_API_KEY}
+"
+  echo -e "${GREEN}  OpenAI:${NC} configured"
+fi
 if [ -n "$DISCORD_WEBHOOK_URL" ]; then
   OPTIONAL_ENV="${OPTIONAL_ENV}      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
 "
@@ -131,7 +136,6 @@ services:
     environment:
       - CLAWDBOT_API_TOKEN=${TOKEN}
       - CLAWDBOT_URL=ws://127.0.0.1:${PORT}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
 ${OPTIONAL_ENV}
     volumes:
       - ~/.openclaw/workspace:/root/.openclaw/workspace
