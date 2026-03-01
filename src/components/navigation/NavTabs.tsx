@@ -12,7 +12,7 @@ interface NavTab {
 const TABS: NavTab[] = [
   {
     path: '/monitor',
-    label: 'MONITOR',
+    label: 'TRACE',
     icon: <Activity size={14} />,
   },
   {

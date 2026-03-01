@@ -14,15 +14,12 @@ import {
   MarkerType,
   ReactFlowProvider,
 } from '@xyflow/react'
-import { LayoutGrid, ArrowRightLeft, ArrowUpDown, Crosshair } from 'lucide-react'
 import '@xyflow/react/dist/style.css'
 import { SessionNode } from './SessionNode'
 import { ActionNode } from './ActionNode'
 import { ExecNode } from './ExecNode'
 import { CrabNode } from './CrabNode'
 import { ChaserCrabNode, type ChaserCrabState } from './ChaserCrabNode'
-import { CrabTrails } from '~/components/effects/CrabTrails'
-import { SandGradient } from '~/components/effects/SandGradient'
 import { layoutGraph } from '~/lib/graph-layout'
 import type {
   MonitorSession,
@@ -103,7 +100,7 @@ function ActionGraphInner({
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)
 
   // Layout direction: LR = horizontal (sessions spawn right), TB = vertical (sessions stack down)
-  const [layoutDirection, setLayoutDirection] = useState<'LR' | 'TB'>('LR')
+  const [layoutDirection] = useState<'LR' | 'TB'>('LR')
 
   // Follow mode: auto-pan to new nodes
   const [followMode, setFollowMode] = useState(false)
@@ -754,18 +751,6 @@ function ActionGraphInner({
     setEdges(layoutedEdges)
   }, [layoutedNodes, layoutedEdges, setNodes, setEdges, handleCrabClick])
 
-  // Re-organize: clear pinned positions and re-apply layout
-  const handleReorganize = useCallback(() => {
-    pinnedPositions.current.clear()
-    setNodes((nds) => {
-      const chaserNode = nds.find((n) => n.id === CHASER_CRAB_ID)
-      if (chaserNode) {
-        return [...layoutedNodes, chaserNode]
-      }
-      return [...layoutedNodes]
-    })
-  }, [layoutedNodes, setNodes])
-
   // Cleanup
   useEffect(() => {
     return () => {
@@ -821,39 +806,6 @@ function ActionGraphInner({
         <Controls
           className="bg-shell-900! shadow-lg! [&>button]:bg-shell-800! [&>button]:text-gray-300! [&>button:hover]:bg-shell-700! [&>button>svg]:fill-gray-300!"
         />
-        <div className="absolute top-2 right-2 z-10 flex gap-1.5">
-          <button
-            onClick={() => setFollowMode((prev) => !prev)}
-            title={followMode ? 'Following new nodes (click to disable)' : 'Follow new nodes'}
-            className={`p-1.5 rounded shadow-lg cursor-pointer transition-colors ${followMode
-              ? 'bg-neon-cyan/20 text-neon-cyan backdrop-blur-lg'
-              : 'bg-[#252018] text-gray-300 hover:bg-[#2a221c]'
-              }`}
-          >
-            <Crosshair className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => {
-              setLayoutDirection((d) => (d === 'LR' ? 'TB' : 'LR'))
-              pinnedPositions.current.clear()
-            }}
-            title={layoutDirection === 'LR' ? 'Stack sessions vertically' : 'Spread sessions horizontally'}
-            className="p-1.5 rounded bg-shell-800 border border-shell-700 text-gray-300 hover:bg-shell-700 shadow-lg cursor-pointer"
-          >
-            {layoutDirection === 'LR' ? (
-              <ArrowRightLeft className="w-4 h-4" />
-            ) : (
-              <ArrowUpDown className="w-4 h-4" />
-            )}
-          </button>
-          <button
-            onClick={handleReorganize}
-            title="Re-organize layout"
-            className="p-1.5 rounded bg-shell-800 border border-shell-700 text-gray-300 hover:bg-shell-700 shadow-lg cursor-pointer"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-        </div>
         <MiniMap
           nodeColor={(node) => {
             if (node.type === 'crab') return '#ef4444'

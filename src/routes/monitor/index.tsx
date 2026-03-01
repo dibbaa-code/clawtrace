@@ -52,7 +52,7 @@ function MonitorPageWrapper() {
           <div className="flex items-center gap-3">
             <Loader2 size={18} className="animate-spin text-crab-400" />
             <span className="font-display text-sm text-gray-400 tracking-wide uppercase">
-              Loading Monitor...
+              Loading Trace...
             </span>
           </div>
         </motion.div>
@@ -490,7 +490,7 @@ function MonitorPage() {
           <div className="flex items-center gap-3 px-3 py-2 bg-[#252018] rounded-lg">
             <StatusIndicator status={connecting ? 'thinking' : connected ? 'active' : 'idle'} />
             <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">
-              Monitor Active
+              Tracing Active
             </span>
           </div>
         </div>
@@ -528,15 +528,15 @@ function MonitorPage() {
 
           {/* Persistence indicator */}
           {/* Stats display */}
-          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-crab-500/10 border border-crab-500/20 rounded-lg">
+          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-[#252018] rounded-lg">
             <div className="flex items-center gap-2">
               <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Streams</span>
-              <span className="font-display text-sm text-neon-cyan font-bold">{sessions.length}</span>
+              <span className="font-display text-sm text-crab-500 font-bold">{sessions.length}</span>
             </div>
             <div className="w-px h-4 bg-[#3d3228]" />
             <div className="flex items-center gap-2">
               <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Events</span>
-              <span className="font-display text-sm text-neon-peach font-bold">{actions.length}</span>
+              <span className="font-display text-sm text-crab-500 font-bold">{actions.length}</span>
             </div>
           </div>
 

@@ -155,7 +155,7 @@ export function SessionList({
 
   return (
     <motion.div
-      className="flex flex-col h-full bg-shell-900 relative"
+      className="flex flex-col h-full bg-[#1e1a16] relative"
       initial={false}
       animate={{ width: collapsed ? 56 : 288 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -174,7 +174,7 @@ export function SessionList({
           </h2>
           <button
             onClick={onToggleCollapse}
-            className="p-1.5 hover:bg-shell-800 rounded transition-all"
+            className="p-1.5 hover:bg-[#252018] rounded transition-all"
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? (
@@ -209,7 +209,7 @@ export function SessionList({
                 tabIndex={collapsed ? -1 : 0}
                 className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded transition-all ${!platformFilter
                   ? "bg-crab-600 text-white"
-                  : "bg-shell-800 text-gray-400 hover:bg-shell-700 hover:text-gray-300"
+                  : "bg-[#252018] text-gray-400 hover:bg-[#2a221c] hover:text-gray-300"
                   }`}
               >
                 All
@@ -219,9 +219,9 @@ export function SessionList({
                   key={p}
                   onClick={() => setPlatformFilter(p)}
                   tabIndex={collapsed ? -1 : 0}
-                  className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded border transition-all ${platformFilter === p
-                    ? "bg-crab-600 border-crab-500 text-white box-glow-red"
-                    : "bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600 hover:text-gray-300"
+                  className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded transition-all ${platformFilter === p
+                    ? "bg-crab-600 text-white"
+                    : "bg-[#252018] text-gray-400 hover:bg-[#2a221c] hover:text-gray-300"
                     }`}
                 >
                   {platformEmoji[p] || "📱"} {p}
@@ -282,7 +282,7 @@ export function SessionList({
                         {session.agentId}
                       </span>
                       {session.isGroup && (
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-shell-800 border border-shell-700 rounded text-[11px] text-shell-400">
+                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-[#252018] rounded text-[11px] text-shell-400">
                           <Users size={10} />
                           group
                         </span>

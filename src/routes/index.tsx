@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { Github, Activity, Terminal, FolderOpen } from 'lucide-react'
+import { Github, FolderOpen } from 'lucide-react'
 import { PixelWaves } from '~/components/effects/PixelWaves'
 import { CrabIdleAnimation } from '~/components/ani'
 import { version } from '../../package.json'
@@ -89,31 +89,6 @@ function Home() {
             Open-Source OpenClaw Companion
           </motion.p>
 
-          {/* Feature cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10 max-w-2xl mx-auto"
-          >
-            {[
-              { icon: Activity, label: 'Live Activity Feed', color: 'text-neon-mint' },
-              { icon: Terminal, label: 'Session & Action Graph', color: 'text-neon-peach' },
-              { icon: FolderOpen, label: 'Workspace Browser', color: 'text-neon-coral' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.25 + i * 0.05 }}
-                className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-shell-900/60 border border-shell-800/50 hover:bg-shell-900/80 hover:border-shell-700/50 transition-all"
-              >
-                <item.icon size={22} className={item.color} />
-                <span className="font-display text-xs text-shell-300">{item.label}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-
           {/* CTA buttons */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -125,7 +100,7 @@ function Home() {
               to="/monitor"
               className="px-8 py-3 rounded-full bg-crab-500 hover:bg-crab-600 text-white font-display font-semibold text-sm tracking-wide transition-all hover:shadow-lg hover:shadow-crab-500/40 hover:-translate-y-0.5"
             >
-              Launch Monitor
+              Launch Trace
             </Link>
             <Link
               to="/workspace"
@@ -141,7 +116,7 @@ function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-shell-900/80 rounded-full"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-shell-900/80 rounded-full"
           >
             <span className="w-2 h-2 rounded-full bg-neon-mint animate-pulse" />
             <span className="font-display text-xs text-shell-500">
