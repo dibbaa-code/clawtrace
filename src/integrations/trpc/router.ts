@@ -251,7 +251,9 @@ const openclawRouter = router({
           persistence.addAction(enrichedAction)
           emit.next({ type: 'action', action: enrichedAction })
 
-          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL) {
+          // Only alert on finalized actions - skip streaming chunks to avoid duplicate alerts
+          const shouldAlertAction = ['complete', 'tool_call', 'tool_result', 'error', 'aborted'].includes(parsed.action.type)
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertAction) {
             sendDiscordAlert({
               traceId,
               threat,
@@ -269,7 +271,9 @@ const openclawRouter = router({
           persistence.addExecEvent(enrichedExec)
           emit.next({ type: 'exec', execEvent: enrichedExec })
 
-          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL) {
+          // Only alert on completed exec - skip started/output to avoid duplicate alerts
+          const shouldAlertExec = parsed.execEvent.eventType === 'completed'
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertExec) {
             sendDiscordAlert({
               traceId,
               threat,
