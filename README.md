@@ -14,6 +14,8 @@ Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a liv
 
 ## Installation
 
+[Quick Setup Link](https://v0-clawtrace-landing-page.vercel.app/#)
+
 ### Via OpenClaw Agent
 
 Paste this link to your OpenClaw agent and ask it to install/update Clawtrace:
