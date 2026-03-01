@@ -3,9 +3,14 @@ import type { MonitorAction, MonitorExecEvent, ThreatInfo } from '~/integrations
 
 export type { ThreatInfo }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+let _openai: OpenAI | null = null
+
+function getOpenAI(): OpenAI | null {
+  const key = process.env.OPENAI_API_KEY
+  if (!key?.trim()) return null
+  if (!_openai) _openai = new OpenAI({ apiKey: key })
+  return _openai
+}
 
 const SYSTEM_PROMPT = `You are a security analyst for an AI agent monitoring system. Analyze events (tool calls, commands, outputs) and determine if they are malicious or suspicious.
 
@@ -63,6 +68,9 @@ export async function analyzeThreat(
   action?: MonitorAction,
   execEvent?: MonitorExecEvent
 ): Promise<ThreatInfo> {
+  const openai = getOpenAI()
+  if (!openai) return { malicious: false }
+
   const context = buildEventContext(action, execEvent)
   if (!action && !execEvent) {
     return { malicious: false }

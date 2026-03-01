@@ -10,7 +10,6 @@ import {
   MessageSquare,
   MessageCircle,
   Bot,
-  AlertTriangle,
 } from 'lucide-react'
 import type { MonitorAction } from '~/integrations/openclaw'
 
@@ -145,90 +144,84 @@ export const ActionNode = memo(function ActionNode({
       transition={{ duration: 0.2 }}
       onClick={() => setExpanded(!expanded)}
       className={`
-        px-3 py-2.5 rounded-lg border-2 min-w-[180px] cursor-pointer
-        bg-shell-900
-        ${isMalicious ? 'border-crab-500 bg-crab-950/30' : state.borderColor}
-        ${selected ? 'ring-2 ring-white/30' : ''}
+        px-3.5 py-2.5 rounded-xl border min-w-[180px] cursor-pointer
+        ${isMalicious
+          ? 'bg-red-950/60 border-red-800/80'
+          : 'bg-shell-900/95 border-shell-700/60 backdrop-blur-sm'
+        }
+        ${selected ? 'ring-2 ring-white/20' : ''}
         ${expanded ? 'max-w-[600px]' : 'max-w-[300px]'}
-        transition-all duration-150 hover:bg-shell-800
+        transition-all duration-150 hover:bg-shell-800/95
       `}
       style={{
         boxShadow: isMalicious
-          ? '0 0 12px rgba(239, 68, 68, 0.4)'
+          ? '0 2px 16px rgba(185, 28, 28, 0.25), 0 0 0 1px rgba(220, 38, 38, 0.15)'
           : selected
-            ? '0 0 15px rgba(59, 130, 246, 0.3)'
-            : '0 4px 12px rgba(0, 0, 0, 0.3)',
+            ? '0 0 0 1px rgba(255,255,255,0.1)'
+            : '0 2px 8px rgba(0, 0, 0, 0.2)',
       }}
     >
       <Handle type="target" position={Position.Top} className="bg-shell-600! w-2! h-2! border-shell-800!" />
 
-      {/* Header: Event type + state */}
-      <div className="flex items-center gap-2 mb-1.5">
-        <EventIcon size={12} className="text-shell-500" />
-        <span className="font-display text-xs font-medium text-gray-300 uppercase tracking-wide">
+      {/* Header: compact single line */}
+      <div className="flex items-center gap-2 mb-2">
+        <EventIcon size={11} className={isMalicious ? 'text-red-400/80' : 'text-shell-500'} />
+        <span className={`font-display text-[11px] font-medium uppercase tracking-wider ${isMalicious ? 'text-red-200/90' : 'text-gray-400'}`}>
           {eventInfo.label}
         </span>
         <StateIcon
-          size={12}
-          className={`${state.iconColor} ${state.animate ? 'animate-spin' : ''} ml-auto`}
+          size={11}
+          className={`${isMalicious ? 'text-red-400' : state.iconColor} ${state.animate ? 'animate-spin' : ''} ml-auto`}
         />
       </div>
 
-      {/* Threat badge */}
+      {/* Threat: minimal pill */}
       {isMalicious && (
-        <div className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded bg-crab-900/50 border border-crab-700/50">
-          <AlertTriangle size={12} className="text-crab-400" />
-          <span className="font-console text-[11px] text-crab-300">
-            {data.threat?.severity ?? 'malicious'}
-            {data.threat?.reason && `: ${data.threat.reason}`}
+        <div className="mb-2 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+          <span className="font-console text-[11px] text-red-200/90">
+            {data.threat?.severity ?? 'alert'}
           </span>
+          {data.threat?.reason && (
+            <span className="font-console text-[10px] text-red-300/60 truncate max-w-[200px]" title={data.threat.reason}>
+              · {data.threat.reason}
+            </span>
+          )}
         </div>
       )}
 
-      {/* Timestamp */}
-      <div className="font-console text-xs text-shell-500 mb-1.5">
-        <span className="text-crab-600">&gt;</span> {formatTime(data.timestamp)}
+      {/* Meta: timestamp + trace + stats in one subtle line */}
+      <div className="font-console text-[10px] text-shell-500 mb-2 flex items-center gap-2 flex-wrap">
+        <span>{formatTime(data.timestamp)}</span>
         {data.traceId && (
-          <span className="ml-2 text-shell-600" title={`Trace: ${data.traceId}`}>
-            #{data.traceId}
-          </span>
+          <span className="text-shell-600" title={`Trace: ${data.traceId}`}>#{data.traceId}</span>
+        )}
+        {hasMetadata && (
+          <>
+            {data.duration && <span className="text-neon-cyan/80">{formatDuration(data.duration)}</span>}
+            {data.inputTokens != null && <span className="text-shell-600">in:{data.inputTokens}</span>}
+            {data.outputTokens != null && <span className="text-shell-600">out:{data.outputTokens}</span>}
+            {data.stopReason && <span className="text-neon-peach/80">{data.stopReason}</span>}
+          </>
         )}
       </div>
 
-      {/* Metadata for complete nodes */}
-      {hasMetadata && (
-        <div className="font-console text-xs text-shell-400 mb-1.5 flex gap-2 flex-wrap">
-          {data.duration && (
-            <span className="text-neon-cyan">{formatDuration(data.duration)}</span>
-          )}
-          {data.inputTokens && (
-            <span><span className="text-shell-500">in:</span> {data.inputTokens}</span>
-          )}
-          {data.outputTokens && (
-            <span><span className="text-shell-500">out:</span> {data.outputTokens}</span>
-          )}
-          {data.stopReason && (
-            <span className="text-neon-peach">{data.stopReason}</span>
-          )}
-        </div>
-      )}
-
       {data.toolName && (
-        <div className="font-console text-[11px] text-neon-lavender mb-1.5">
-          <span className="text-shell-500">tool:</span> {data.toolName}
+        <div className="font-console text-[10px] text-neon-lavender/90 mb-2">
+          {data.toolName}
         </div>
       )}
 
-      {/* Content - markdown for both preview and expanded */}
+      {/* Content */}
       {(expanded ? fullContent : truncatedContent) && (
         <div className={`
-          prose prose-invert prose-xs max-w-none text-gray-300 text-xs
-          prose-headings:text-gray-200 prose-headings:font-display prose-headings:text-xs prose-headings:my-1
-          prose-p:text-xs prose-p:leading-relaxed prose-p:my-1
-          prose-code:text-neon-cyan prose-code:bg-shell-950 prose-code:px-1 prose-code:rounded prose-code:text-xs
-          prose-pre:bg-shell-950 prose-pre:border prose-pre:border-shell-800 prose-pre:text-xs prose-pre:my-1
+          prose prose-invert prose-xs max-w-none text-gray-300/95 text-[12px] leading-relaxed
+          prose-headings:text-gray-200 prose-headings:font-display prose-headings:text-xs prose-headings:my-0.5
+          prose-p:text-[12px] prose-p:leading-relaxed prose-p:my-0.5
+          prose-code:text-neon-cyan/90 prose-code:bg-shell-950/80 prose-code:px-1 prose-code:rounded prose-code:text-[11px]
+          prose-pre:bg-shell-950/80 prose-pre:border prose-pre:border-shell-800/60 prose-pre:text-[11px] prose-pre:my-1
           prose-a:text-neon-lavender prose-a:no-underline hover:prose-a:underline
-          prose-li:text-xs prose-li:my-0.5
+          prose-li:text-[12px] prose-li:my-0
           prose-strong:text-gray-200
           ${expanded ? 'overflow-auto max-h-[400px]' : 'line-clamp-3'}
         `}>
@@ -237,7 +230,7 @@ export const ActionNode = memo(function ActionNode({
       )}
 
       {expanded && data.toolArgs != null && (
-        <pre className="mt-2 font-console text-[11px] text-shell-500 bg-shell-950 p-2 rounded border border-shell-800 overflow-auto max-h-32">
+        <pre className="mt-2 font-console text-[10px] text-shell-500 bg-shell-950/50 p-2 rounded-lg border border-shell-800/50 overflow-auto max-h-32">
           {JSON.stringify(data.toolArgs, null, 2) as string}
         </pre>
       )}
