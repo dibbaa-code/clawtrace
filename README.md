@@ -19,22 +19,12 @@ Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a liv
 
 [Quick Setup Link](https://v0-clawtrace-landing-page.vercel.app/#)
 
-### Via OpenClaw Agent
-
-Paste this link to your OpenClaw agent and ask it to install/update Clawtrace:
-
-```
-https://raw.githubusercontent.com/dibbaa-code/clawtrace/master/public/skill.md
-```
-
 ### CLI Install
 
+Run this command in the machine running your openclaw agents
+
 ```bash
-VERSION=$(curl -s https://api.github.com/repos/dibbaa-code/clawtrace/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
-mkdir -p ~/.clawtrace ~/.local/bin
-curl -sL "https://github.com/dibbaa-code/clawtrace/releases/download/${VERSION}/clawtrace-${VERSION}.tar.gz" | tar -xz -C ~/.clawtrace
-cp ~/.clawtrace/bin/clawtrace ~/.local/bin/
-chmod +x ~/.local/bin/clawtrace
+curl -fsSL https://raw.githubusercontent.com/dibbaa-code/clawtrace/main/setup.sh | bash -s -- OPENAI_API_KEY=<your-openai-api-key>
 ```
 
 ## CLI Usage
