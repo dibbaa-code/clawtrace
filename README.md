@@ -27,45 +27,10 @@ Run this command in the machine running your openclaw agents
 curl -fsSL https://raw.githubusercontent.com/dibbaa-code/clawtrace/main/setup.sh | bash -s -- OPENAI_API_KEY=<your-openai-api-key>
 ```
 
-## CLI Usage
-
-### Commands
-
-```bash
-clawtrace                    # Start server (default: 0.0.0.0:3000)
-clawtrace start --daemon     # Run in background
-clawtrace stop               # Stop background server
-clawtrace status             # Check if running
-clawtrace update             # Update to latest version
-```
-
-### Options
-
-```
--p, --port <port>      Server port (default: 3000)
--H, --host <host>      Bind address (default: 0.0.0.0)
--g, --gateway <url>    Gateway WebSocket URL (default: ws://127.0.0.1:18789)
--t, --token <token>    Gateway auth token
--d, --daemon           Run in background
--v, --version          Show version
-```
-
-### Examples
-
-```bash
-clawtrace -p 8080                           # Custom port
-clawtrace -t mytoken123                     # Explicit token
-clawtrace -g ws://192.168.1.50:18789        # Remote gateway
-clawtrace start -d -p 8080                  # Daemon on port 8080
-```
-
 ### Auto-detection
 
 The CLI automatically detects your gateway token from `~/.openclaw/openclaw.json` - no config needed if you're running OpenClaw locally.
 
-### QR Code
-
-On startup, Clawtrace displays a QR code you can scan to open the monitor on your phone. Requires `qrencode` installed (the installer adds it automatically).
 
 ### Docker (recommended)
 
