@@ -24,7 +24,7 @@ export function CrabNode({ data }: CrabNodeProps) {
         className={`absolute w-24 h-24 rounded-full border ${data.active ? 'border-crab-500/30' : 'border-shell-700/50'
           }`}
         style={{
-          boxShadow: data.active ? '0 0 15px rgba(59, 130, 246, 0.2)' : 'none',
+          boxShadow: data.active ? '0 0 15px rgba(230, 57, 70, 0.2)' : 'none',
         }}
       />
 
@@ -44,7 +44,7 @@ export function CrabNode({ data }: CrabNodeProps) {
         position={Position.Bottom}
         className="bg-crab-500! w-4! h-4! border-2! border-shell-900! z-10"
         style={{
-          boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)',
+          boxShadow: '0 0 10px rgba(230, 57, 70, 0.5)',
         }}
       />
     </motion.div>

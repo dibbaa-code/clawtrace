@@ -67,7 +67,7 @@ export function NavTabs() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-shell-700/50 bg-shell-800/50 hover:bg-shell-800 hover:border-shell-600 transition-all group"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#252018] hover:bg-[#2a221c] transition-all group"
       >
         <span className="text-crab-400">{activeTab.icon}</span>
         <span className="font-console text-xs tracking-widest text-shell-200">
@@ -103,9 +103,9 @@ export function NavTabs() {
               className="absolute top-full left-0 mt-2 z-50 min-w-[200px]"
             >
               {/* Terminal-style container */}
-              <div className="bg-shell-900 border border-shell-700 rounded-lg overflow-hidden shadow-2xl shadow-black/50">
+              <div className="bg-[#1e1a16] rounded-lg overflow-hidden shadow-2xl shadow-black/50">
                 {/* Terminal header */}
-                <div className="flex items-center gap-2 px-3 py-2 bg-shell-950 border-b border-shell-800">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#1a1510]">
                   <Terminal size={12} className="text-shell-500" />
                   <span className="font-console text-[11px] text-shell-500 uppercase tracking-widest">
                     navigate
@@ -122,17 +122,15 @@ export function NavTabs() {
                       <button
                         key={tab.path}
                         onClick={() => handleSelect(tab.path)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-all group ${
-                          isActive
-                            ? 'bg-crab-500/10 text-crab-400'
-                            : 'text-shell-400 hover:bg-shell-800 hover:text-shell-200'
-                        }`}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-all group ${isActive
+                          ? 'bg-[#252018] text-crab-400'
+                          : 'text-shell-400 hover:bg-[#252018] hover:text-shell-200'
+                          }`}
                       >
                         {/* Icon */}
                         <span
-                          className={`transition-colors ${
-                            isActive ? 'text-crab-400' : 'text-shell-500 group-hover:text-shell-400'
-                          }`}
+                          className={`transition-colors ${isActive ? 'text-crab-400' : 'text-shell-500 group-hover:text-shell-400'
+                            }`}
                         >
                           {tab.icon}
                         </span>
@@ -152,7 +150,7 @@ export function NavTabs() {
                 </div>
 
                 {/* Terminal footer with hint */}
-                <div className="px-3 pb-2 pt-1 bg-shell-950/50 border-t border-shell-800/50">
+                <div className="px-3 pb-2 pt-1 bg-shell-950">
                   <span className="font-console text-[11px] text-shell-600">
                     <span className="text-shell-500">esc</span> to close
                   </span>

@@ -51,11 +51,10 @@ function SubagentItem({
   return (
     <button
       onClick={() => onSelect(session.key)}
-      className={`w-full text-left py-3 pr-4 pl-8 border-b border-shell-800/50 transition-all duration-150 ${
-        selected
+      className={`w-full text-left py-3 pr-4 pl-8 border-b border-shell-800/50 transition-all duration-150 ${selected
           ? 'bg-neon-cyan/5 border-l-2 border-l-neon-cyan'
           : 'active:bg-shell-800/30 border-l-2 border-l-transparent'
-      }`}
+        }`}
     >
       <div className="font-display text-[11px] font-medium text-neon-cyan/60 uppercase tracking-widest mb-1">
         subagent
@@ -195,11 +194,10 @@ export function MobileSessionDrawer({
                 <div className="flex gap-2 mt-3 flex-wrap">
                   <button
                     onClick={() => setPlatformFilter(null)}
-                    className={`px-3 py-1.5 text-xs font-display uppercase tracking-wide rounded-lg border transition-all ${
-                      !platformFilter
+                    className={`px-3 py-1.5 text-xs font-display uppercase tracking-wide rounded-lg border transition-all ${!platformFilter
                         ? 'bg-crab-600 border-crab-500 text-white'
                         : 'bg-shell-800 border-shell-700 text-gray-400 active:border-shell-600'
-                    }`}
+                      }`}
                   >
                     All
                   </button>
@@ -207,11 +205,10 @@ export function MobileSessionDrawer({
                     <button
                       key={p}
                       onClick={() => setPlatformFilter(p)}
-                      className={`px-3 py-1.5 text-xs font-display uppercase tracking-wide rounded-lg border transition-all ${
-                        platformFilter === p
+                      className={`px-3 py-1.5 text-xs font-display uppercase tracking-wide rounded-lg border transition-all ${platformFilter === p
                           ? 'bg-crab-600 border-crab-500 text-white'
                           : 'bg-shell-800 border-shell-700 text-gray-400 active:border-shell-600'
-                      }`}
+                        }`}
                     >
                       {platformEmoji[p] || '📱'} {p}
                     </button>
@@ -233,11 +230,10 @@ export function MobileSessionDrawer({
                   >
                     <button
                       onClick={() => handleSelect(session.key)}
-                      className={`w-full text-left p-4 border-b border-shell-800 transition-all duration-150 ${
-                        selectedKey === session.key
+                      className={`w-full text-left p-4 border-b border-shell-800 transition-all duration-150 ${selectedKey === session.key
                           ? 'bg-crab-900/20 border-l-2 border-l-crab-500'
                           : 'active:bg-shell-800/50 border-l-2 border-l-transparent'
-                      }`}
+                        }`}
                     >
                       <div className="font-display text-[11px] font-medium text-shell-500 uppercase tracking-widest mb-1">
                         main

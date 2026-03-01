@@ -13,16 +13,16 @@ const sizeClasses = {
 
 const statusConfig = {
   idle: {
-    color: 'bg-shell-600',
-    glow: 'none',
+    color: 'bg-crab-500',
+    glow: '0 0 8px rgba(230, 57, 70, 0.5)',
   },
   active: {
     color: 'bg-neon-mint',
-    glow: '0 0 8px rgba(152, 255, 200, 0.6)',
+    glow: '0 0 8px rgba(16, 185, 129, 0.6)',
   },
   thinking: {
-    color: 'bg-neon-peach',
-    glow: '0 0 8px rgba(255, 176, 136, 0.6)',
+    color: 'bg-crab-500',
+    glow: '0 0 8px rgba(230, 57, 70, 0.5)',
   },
 }
 

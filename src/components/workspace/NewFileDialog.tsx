@@ -91,11 +91,11 @@ export function NewFileDialog({ open, onClose, onCreate, folderPath }: NewFileDi
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', duration: 0.3 }}
-            className="relative w-full max-w-lg bg-shell-900 rounded-xl border border-shell-700 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg bg-shell-900 rounded-xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-4 border-b border-shell-800 bg-neon-mint/5">
-              <div className="p-2 rounded-lg bg-neon-mint/10 border border-neon-mint/30">
+            <div className="flex items-center gap-3 px-5 py-4 bg-shell-950">
+              <div className="p-2 rounded-lg bg-neon-mint/10">
                 <Plus size={20} className="text-neon-mint" />
               </div>
               <div className="flex-1 min-w-0">
@@ -174,10 +174,10 @@ export function NewFileDialog({ open, onClose, onCreate, folderPath }: NewFileDi
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-shell-800 bg-shell-900/50">
+            <div className="flex items-center justify-end gap-3 px-5 py-4 bg-shell-950">
               <button
                 onClick={onClose}
-                className="flex items-center gap-2 px-4 py-2 bg-shell-800 hover:bg-shell-700 rounded-lg text-sm font-console text-gray-300 transition-colors border border-shell-700"
+                className="flex items-center gap-2 px-4 py-2 bg-shell-800 hover:bg-shell-700 rounded-lg text-sm font-console text-gray-300 transition-colors"
               >
                 <X size={14} />
                 Cancel

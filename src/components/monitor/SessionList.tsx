@@ -59,13 +59,11 @@ function SubagentItem({
   return (
     <button
       onClick={() => onSelect(session.key)}
-      className={`w-full text-left border-b border-shell-800/50 transition-all duration-150 group ${
-        collapsed ? "p-2" : "py-2 pr-3 pl-6"
-      } ${
-        selected
-          ? "bg-neon-cyan/5 border-l-2 border-l-neon-cyan"
-          : "hover:bg-shell-800/30 border-l-2 border-l-transparent"
-      }`}
+      className={`w-full text-left transition-all duration-150 group ${collapsed ? "p-2" : "py-2 pr-3 pl-6"
+        } ${selected
+          ? "bg-[#252018]"
+          : "hover:bg-[#252018]/70"
+        }`}
       title={collapsed ? "subagent" : undefined}
     >
       {collapsed ? (
@@ -166,12 +164,11 @@ export function SessionList({
       <div className="absolute inset-0 texture-scanlines pointer-events-none opacity-50" />
 
       {/* Header */}
-      <div className="relative p-3 bg-shell-950/50 overflow-hidden">
+      <div className="relative p-3 bg-[#1a1510] overflow-hidden">
         <div className={`flex items-center mb-3 ${collapsed ? "justify-center" : "justify-between"}`}>
           <h2
-            className={`font-mono uppercase text-sm text-crab-400 glow-red tracking-wider ml-1 transition-opacity duration-200 ${
-              collapsed ? "opacity-0 absolute pointer-events-none" : "opacity-100"
-            }`}
+            className={`font-mono uppercase text-sm text-crab-400 glow-red tracking-wider ml-1 transition-opacity duration-200 ${collapsed ? "opacity-0 absolute pointer-events-none" : "opacity-100"
+              }`}
           >
             Sessions
           </h2>
@@ -190,9 +187,8 @@ export function SessionList({
 
         {/* Search input - fades when collapsed */}
         <div
-          className={`transition-all duration-200 ${
-            collapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
-          }`}
+          className={`transition-all duration-200 ${collapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
+            }`}
         >
           <div className="relative">
             <input
@@ -211,11 +207,10 @@ export function SessionList({
               <button
                 onClick={() => setPlatformFilter(null)}
                 tabIndex={collapsed ? -1 : 0}
-                className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded border transition-all ${
-                  !platformFilter
-                    ? "bg-crab-600 border-crab-500 text-white box-glow-red"
-                    : "bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600 hover:text-gray-300"
-                }`}
+                className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded transition-all ${!platformFilter
+                  ? "bg-crab-600 text-white"
+                  : "bg-shell-800 text-gray-400 hover:bg-shell-700 hover:text-gray-300"
+                  }`}
               >
                 All
               </button>
@@ -224,11 +219,10 @@ export function SessionList({
                   key={p}
                   onClick={() => setPlatformFilter(p)}
                   tabIndex={collapsed ? -1 : 0}
-                  className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded border transition-all ${
-                    platformFilter === p
-                      ? "bg-crab-600 border-crab-500 text-white box-glow-red"
-                      : "bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600 hover:text-gray-300"
-                  }`}
+                  className={`px-2.5 py-1 text-[11px] font-display uppercase tracking-wide rounded border transition-all ${platformFilter === p
+                    ? "bg-crab-600 border-crab-500 text-white box-glow-red"
+                    : "bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600 hover:text-gray-300"
+                    }`}
                 >
                   {platformEmoji[p] || "📱"} {p}
                 </button>
@@ -251,11 +245,10 @@ export function SessionList({
             >
               <button
                 onClick={() => onSelect(session.key)}
-                className={`w-full text-left p-3 border-b border-shell-800 transition-all duration-150 group ${
-                  selectedKey === session.key
-                    ? "bg-crab-900/20 border-l-2 border-l-crab-500"
-                    : "hover:bg-shell-800/50 border-l-2 border-l-transparent"
-                }`}
+                className={`w-full text-left p-3 transition-all duration-150 group ${selectedKey === session.key
+                  ? "bg-[#252018]"
+                  : "hover:bg-[#252018]/70"
+                  }`}
                 title={
                   collapsed
                     ? `${session.recipient} (${session.platform})`
@@ -316,9 +309,8 @@ export function SessionList({
                           return next;
                         });
                       }}
-                      className={`w-full border-b border-shell-800/50 transition-all ${
-                        collapsed ? "p-2 justify-center" : "px-4 py-1.5 text-left"
-                      } flex items-center gap-1.5 text-xs font-display uppercase tracking-widest text-shell-500 hover:text-shell-300 hover:bg-shell-800/30`}
+                      className={`w-full transition-all ${collapsed ? "p-2 justify-center" : "px-4 py-1.5 text-left"
+                        } flex items-center gap-1.5 text-xs font-display uppercase tracking-widest text-shell-500 hover:text-shell-300 hover:bg-[#252018]/50`}
                     >
                       <ChevronDown
                         size={16}
@@ -382,7 +374,7 @@ export function SessionList({
       </div>
 
       {/* Footer */}
-      <div className={`relative bg-shell-950/50 ${collapsed ? "py-3 px-2" : "p-2.5"}`}>
+      <div className={`relative bg-[#1a1510] ${collapsed ? "py-3 px-2" : "p-2.5"}`}>
         <div className={`font-console text-xs text-shell-500 text-center flex items-center justify-center ${collapsed ? "flex-col gap-3" : "gap-4"}`}>
           <a
             href="https://github.com/dibbaa-code/clawtrace"

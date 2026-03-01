@@ -78,7 +78,7 @@ export function SettingsPanel({
       {/* Trigger button - hidden on mobile, settings available in bottom bar */}
       <button
         onClick={() => onOpenChange(true)}
-        className="hidden sm:block p-2 bg-shell-800 hover:bg-shell-700 rounded-lg transition-all group"
+        className="hidden sm:block p-2 bg-[#252018] hover:bg-[#2a221c] rounded-lg transition-all group"
       >
         <Settings size={14} className="text-gray-400 group-hover:text-crab-400 transition-colors" />
       </button>
@@ -113,7 +113,7 @@ export function SettingsPanel({
                 </h2>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="p-2 hover:bg-shell-800 rounded-lg transition-all"
+                  className="p-2 hover:bg-[#252018] rounded-lg transition-all"
                 >
                   <X size={18} className="text-gray-400" />
                 </button>
@@ -121,7 +121,7 @@ export function SettingsPanel({
 
               <div className="relative space-y-6">
                 {/* Connection status */}
-                <div className="panel-retro p-4">
+                <div className="panel-sand p-4">
                   <div className="flex items-center gap-3 mb-4">
                     {connected ? (
                       <Wifi size={18} className="text-neon-mint" />
@@ -162,7 +162,7 @@ export function SettingsPanel({
 
                 {/* Discord alerts */}
                 {onTestDiscordAlert && (
-                  <div className="panel-retro p-4">
+                  <div className="panel-sand p-4">
                     <div className="flex items-center gap-3 mb-2">
                       <Bell size={18} className="text-neon-peach" />
                       <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
@@ -193,7 +193,7 @@ export function SettingsPanel({
                 )}
 
                 {/* Debug mode toggle */}
-                <div className="panel-retro p-4">
+                <div className="panel-sand p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Terminal size={18} className="text-shell-500" />
                     <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
@@ -208,8 +208,8 @@ export function SettingsPanel({
                   <button
                     onClick={() => onDebugModeChange(!debugMode)}
                     className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all ${debugMode
-                        ? 'bg-neon-lavender/30 text-neon-lavender'
-                        : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
+                      ? 'bg-neon-lavender/30 text-neon-lavender'
+                      : 'bg-[#252018] text-gray-400 hover:bg-[#2a221c]'
                       }`}
                   >
                     {debugMode ? 'Enabled' : 'Disabled'}
@@ -217,7 +217,7 @@ export function SettingsPanel({
                 </div>
 
                 {/* Background Service */}
-                <div className="panel-retro p-4">
+                <div className="panel-sand p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <HardDrive size={18} className={persistenceEnabled ? 'text-neon-mint' : 'text-shell-500'} />
                     <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
@@ -267,14 +267,14 @@ export function SettingsPanel({
                   <button
                     onClick={onPersistenceClear}
                     disabled={persistenceSessionCount === 0 && persistenceActionCount === 0}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-crab-900/50 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-[#252018] hover:bg-[#2a221c] rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Trash2 size={12} />
                     Clear Stored Data
                   </button>
 
                   {/* Gateway sync sub-option */}
-                  <div className="mt-4 pt-4 border-t border-shell-700">
+                  <div className="mt-4 pt-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <CloudDownload size={14} className="text-shell-500" />
@@ -285,8 +285,8 @@ export function SettingsPanel({
                       <button
                         onClick={() => onHistoricalModeChange(!historicalMode)}
                         className={`px-3 py-1 font-display text-[11px] uppercase tracking-wide rounded transition-all ${historicalMode
-                            ? 'bg-neon-cyan/20 text-neon-cyan'
-                            : 'bg-shell-800 text-gray-500 hover:bg-shell-700'
+                          ? 'bg-neon-cyan/20 text-neon-cyan'
+                          : 'bg-[#252018] text-gray-500 hover:bg-[#2a221c]'
                           }`}
                       >
                         {historicalMode ? 'On' : 'Off'}
@@ -299,7 +299,7 @@ export function SettingsPanel({
                 </div>
 
                 {/* Log collection */}
-                <div className="panel-retro p-4">
+                <div className="panel-sand p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Database size={18} className="text-shell-500" />
                     <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
@@ -320,8 +320,8 @@ export function SettingsPanel({
                   <button
                     onClick={() => onLogCollectionChange(!logCollection)}
                     className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all mb-2 ${logCollection
-                        ? 'bg-neon-mint/20 text-neon-mint'
-                        : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
+                      ? 'bg-neon-mint/20 text-neon-mint'
+                      : 'bg-[#252018] text-gray-400 hover:bg-[#2a221c]'
                       }`}
                   >
                     {logCollection ? 'Recording...' : 'Start Recording'}
@@ -339,7 +339,7 @@ export function SettingsPanel({
                     <button
                       onClick={onClearLogs}
                       disabled={logCount === 0}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-crab-900/50 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-[#252018] hover:bg-[#2a221c] rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 size={12} />
                       Clear
@@ -348,7 +348,7 @@ export function SettingsPanel({
                 </div>
 
                 {/* Info panel */}
-                <div className="panel-retro p-4 bg-shell-950/50">
+                <div className="panel-sand p-4 bg-[#1a1510]">
                   <h3 className="font-display text-xs text-gray-400 uppercase tracking-wide mb-3">
                     <span className="text-crab-600">❮</span> Gateway Info <span className="text-crab-600">❯</span>
                   </h3>

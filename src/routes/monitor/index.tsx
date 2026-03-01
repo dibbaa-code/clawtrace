@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { createFileRoute, Link, useSearch } from '@tanstack/react-router'
 import { useLiveQuery } from '@tanstack/react-db'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Loader2, HardDrive, Trash2 } from 'lucide-react'
+import { ArrowLeft, Loader2, Trash2 } from 'lucide-react'
 import { trpc } from '~/integrations/trpc/client'
 import { NavTabs } from '~/components/navigation'
 import {
@@ -457,11 +457,23 @@ function MonitorPage() {
     : 'openclaw devices list && openclaw devices approve <requestId>'
 
   return (
-    <div className="h-screen flex flex-col bg-shell-950 text-white overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#1a1510] texture-sand text-white overflow-hidden relative">
+      {/* Brown gradient overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: `
+            linear-gradient(180deg, transparent 0%, rgba(60, 45, 35, 0.4) 50%, rgba(45, 35, 28, 0.6) 100%),
+            radial-gradient(ellipse 80% 50% at 50% 100%, rgba(55, 42, 32, 0.5) 0%, transparent 60%)
+          `,
+        }}
+      />
+      {/* Subtle accent gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-crab-950/10 via-transparent to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-crab-600/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-neon-coral/3 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none z-0" />
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative border-b border-crab-500/20">
-        {/* Gradient accent */}
-        <div className="absolute inset-0 bg-gradient-to-r from-crab-500/10 via-transparent to-transparent pointer-events-none" />
+      <header className="flex items-center justify-between px-4 py-3 bg-[#1e1a16] relative">
 
         <div className="relative flex items-center gap-4">
           <Link
@@ -475,7 +487,7 @@ function MonitorPage() {
           <NavTabs />
 
           {/* Status text */}
-          <div className="flex items-center gap-3 px-3 py-2 bg-crab-500/10 border border-crab-500/20 rounded-lg">
+          <div className="flex items-center gap-3 px-3 py-2 bg-[#252018] rounded-lg">
             <StatusIndicator status={connecting ? 'thinking' : connected ? 'active' : 'idle'} />
             <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">
               Monitor Active
@@ -501,7 +513,7 @@ function MonitorPage() {
           {completedCount > 0 && (
             <button
               onClick={handleClearCompleted}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all bg-shell-800/50 hover:bg-crab-900/50 hover:border-crab-700/50 border border-transparent group"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all bg-[#252018] hover:bg-[#2a221c] group"
               title={`Clear ${completedCount} completed item${completedCount !== 1 ? 's' : ''}`}
             >
               <Trash2
@@ -515,30 +527,13 @@ function MonitorPage() {
           )}
 
           {/* Persistence indicator */}
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${persistenceEnabled
-              ? 'bg-neon-mint/10 hover:bg-neon-mint/20'
-              : 'bg-shell-800/50 hover:bg-shell-700'
-              }`}
-            title={persistenceEnabled ? 'Background service running' : 'Background service stopped'}
-          >
-            <HardDrive
-              size={14}
-              className={persistenceEnabled ? 'text-neon-mint' : 'text-shell-500'}
-            />
-            {persistenceEnabled && (
-              <span className="w-1.5 h-1.5 rounded-full bg-neon-mint animate-pulse" />
-            )}
-          </button>
-
           {/* Stats display */}
           <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-crab-500/10 border border-crab-500/20 rounded-lg">
             <div className="flex items-center gap-2">
               <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Streams</span>
               <span className="font-display text-sm text-neon-cyan font-bold">{sessions.length}</span>
             </div>
-            <div className="w-px h-4 bg-crab-500/30" />
+            <div className="w-px h-4 bg-[#3d3228]" />
             <div className="flex items-center gap-2">
               <span className="font-display text-[11px] text-shell-400 uppercase font-semibold">Events</span>
               <span className="font-display text-sm text-neon-peach font-bold">{actions.length}</span>
@@ -575,7 +570,7 @@ function MonitorPage() {
       </header>
 
       {connected && !canPollSessions && (
-        <div className="px-4 py-2 border-y border-neon-peach/30 bg-neon-peach/10">
+        <div className="px-4 py-2 bg-[#1e1a16]">
           <div className="font-console text-xs text-neon-peach">
             Authentication pending. Session polling is paused to avoid missing-scope errors.
           </div>

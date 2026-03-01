@@ -30,7 +30,7 @@ export function MobileMonitorToolbar({
       transition={{ duration: 0.2, ease: 'easeOut' }}
       className="fixed bottom-0 left-0 right-0 z-40 sm:hidden"
     >
-      <div className="bg-shell-900 border-t border-shell-800 px-3 pt-3 pb-3.5">
+      <div className="bg-shell-900 px-3 pt-3 pb-3.5">
         <div className="flex items-center gap-2">
           {/* Sessions button */}
           <button
@@ -46,7 +46,7 @@ export function MobileMonitorToolbar({
           </button>
 
           {/* Stats display */}
-          <div className="flex-1 flex items-center justify-center gap-4 px-3 py-2 bg-shell-800/50 rounded-lg min-h-[44px]">
+          <div className="flex-1 flex items-center justify-center gap-4 px-3 py-2 bg-[#252018] rounded-lg min-h-[44px]">
             <div className="flex items-center gap-2">
               <StatusIndicator status={connecting ? 'thinking' : connected ? 'active' : 'idle'} size="sm" />
               <span className="font-console text-xs text-shell-400">
@@ -76,7 +76,7 @@ export function MobileMonitorToolbar({
           {/* Settings button */}
           <button
             onClick={onOpenSettings}
-            className="p-3 min-w-[48px] min-h-[48px] rounded-lg active:bg-shell-800 text-gray-400 active:text-crab-400 transition-colors"
+            className="p-3 min-w-[48px] min-h-[48px] rounded-lg active:bg-[#252018] text-gray-400 active:text-crab-400 transition-colors"
           >
             <Settings size={22} />
           </button>

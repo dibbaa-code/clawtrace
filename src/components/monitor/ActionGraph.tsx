@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ReactFlow,
-  Background,
   Controls,
   MiniMap,
   useNodesState,
@@ -22,6 +21,8 @@ import { ActionNode } from './ActionNode'
 import { ExecNode } from './ExecNode'
 import { CrabNode } from './CrabNode'
 import { ChaserCrabNode, type ChaserCrabState } from './ChaserCrabNode'
+import { CrabTrails } from '~/components/effects/CrabTrails'
+import { SandGradient } from '~/components/effects/SandGradient'
 import { layoutGraph } from '~/lib/graph-layout'
 import type {
   MonitorSession,
@@ -788,7 +789,22 @@ function ActionGraphInner({
   )
 
   return (
-    <div className="w-full h-full bg-shell-950 texture-grid relative">
+    <div className="w-full h-full bg-[#1a1510] texture-sand relative">
+      {/* Brown gradient - same as launch screen */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: 0,
+          background: `
+            linear-gradient(180deg, transparent 0%, rgba(60, 45, 35, 0.4) 50%, rgba(45, 35, 28, 0.6) 100%),
+            radial-gradient(ellipse 80% 50% at 50% 100%, rgba(55, 42, 32, 0.5) 0%, transparent 60%)
+          `,
+        }}
+      />
+      {/* Accent gradients and blur orbs */}
+      <div className="absolute inset-0 bg-gradient-to-br from-crab-950/10 via-transparent to-transparent pointer-events-none" style={{ zIndex: 0 }} />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-crab-600/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ zIndex: 0 }} />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-neon-coral/3 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 pointer-events-none" style={{ zIndex: 0 }} />
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -802,17 +818,16 @@ function ActionGraphInner({
         maxZoom={2}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#252535" gap={24} size={1} />
         <Controls
-          className="bg-shell-900! border-shell-700! shadow-lg! [&>button]:bg-shell-800! [&>button]:border-shell-700! [&>button]:text-gray-300! [&>button:hover]:bg-shell-700! [&>button>svg]:fill-gray-300!"
+          className="bg-shell-900! shadow-lg! [&>button]:bg-shell-800! [&>button]:text-gray-300! [&>button:hover]:bg-shell-700! [&>button>svg]:fill-gray-300!"
         />
         <div className="absolute top-2 right-2 z-10 flex gap-1.5">
           <button
             onClick={() => setFollowMode((prev) => !prev)}
             title={followMode ? 'Following new nodes (click to disable)' : 'Follow new nodes'}
-            className={`p-1.5 rounded border shadow-lg cursor-pointer transition-colors ${followMode
-                ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan backdrop-blur-lg'
-                : 'bg-shell-800 border-shell-700 text-gray-300 hover:bg-shell-700'
+            className={`p-1.5 rounded shadow-lg cursor-pointer transition-colors ${followMode
+              ? 'bg-neon-cyan/20 text-neon-cyan backdrop-blur-lg'
+              : 'bg-[#252018] text-gray-300 hover:bg-[#2a221c]'
               }`}
           >
             <Crosshair className="w-4 h-4" />
@@ -853,7 +868,7 @@ function ActionGraphInner({
             return '#52526e'
           }}
           maskColor="rgba(10, 10, 15, 0.8)"
-          className="bg-shell-900! border-shell-700!"
+          className="bg-[#1e1a16]!"
           style={{ backgroundColor: '#0a0a0f', width: 100, height: 75 }}
         />
       </ReactFlow>

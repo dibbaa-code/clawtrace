@@ -1,15 +1,18 @@
 import { memo } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 
+const WAVE_SIZE = 500
+
 export const PixelWaves = memo(function PixelWaves() {
-  return (
+  const content = (
     <div
-      className="fixed pointer-events-none"
+      className="fixed pointer-events-none z-0"
       style={{
-        bottom: '50px',
-        right: '-100px',
-        width: '250px',
-        height: '250px',
+        bottom: '20vh',
+        right: '-20vw',
+        width: `${WAVE_SIZE}px`,
+        height: `${WAVE_SIZE}px`,
         transform: 'rotate(-45deg)',
         transformOrigin: 'bottom right',
       }}
@@ -31,12 +34,11 @@ export const PixelWaves = memo(function PixelWaves() {
         >
           <svg
             width="100%"
-            height="250"
+            height={WAVE_SIZE}
             viewBox="0 0 250 250"
             preserveAspectRatio="none"
             style={{ imageRendering: 'pixelated' }}
           >
-            {/* Wave curve */}
             <path
               d={`
                 M 0 ${220 - index * 30}
@@ -51,8 +53,6 @@ export const PixelWaves = memo(function PixelWaves() {
               `}
               fill={`rgba(100, 149, 237, ${0.15 + index * 0.05})`}
             />
-
-            {/* Wave foam */}
             <path
               d={`
                 M 0 ${223 - index * 30}
@@ -72,25 +72,34 @@ export const PixelWaves = memo(function PixelWaves() {
         </motion.div>
       ))}
 
-      {/* Foam particles */}
-      {Array.from({ length: 8 }).map((_, i) => (
+      {/* Foam particles along wave crest */}
+      {[
+        { right: 40, bottom: 85 },
+        { right: 120, bottom: 78 },
+        { right: 200, bottom: 82 },
+        { right: 280, bottom: 76 },
+        { right: 360, bottom: 80 },
+        { right: 80, bottom: 72 },
+        { right: 240, bottom: 74 },
+        { right: 320, bottom: 70 },
+      ].map((pos, i) => (
         <motion.div
           key={`particle-${i}`}
-          className="absolute rounded-sm"
+          className="absolute rounded-sm z-10"
           style={{
-            backgroundColor: 'rgb(210, 180, 140)',
-            width: `${2 + Math.random() * 3}px`,
-            height: `${2 + Math.random() * 3}px`,
-            right: `${30 + i * 25}px`,
-            bottom: `${150 + Math.random() * 40}px`,
-            opacity: 0.2 + Math.random() * 0.2,
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            width: '3px',
+            height: '3px',
+            right: `${pos.right}px`,
+            bottom: `${pos.bottom}px`,
+            opacity: 0.35,
           }}
           animate={{
-            y: [-4, -10, -4],
-            opacity: [0.2, 0.4, 0.2],
+            y: [-3, -8, -3],
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
-            duration: 2.5 + Math.random() * 1.5,
+            duration: 2.5 + i * 0.2,
             repeat: Infinity,
             ease: 'easeInOut',
             delay: i * 0.15,
@@ -99,4 +108,7 @@ export const PixelWaves = memo(function PixelWaves() {
       ))}
     </div>
   )
+
+  if (typeof document === 'undefined') return null
+  return createPortal(content, document.body)
 })

@@ -535,9 +535,7 @@ function WorkspacePage() {
   return (
     <div className="h-screen flex flex-col bg-shell-950 text-white overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative border-b border-crab-500/20">
-        {/* Gradient accent */}
-        <div className="absolute inset-0 bg-gradient-to-r from-crab-500/10 via-transparent to-transparent pointer-events-none" />
+      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 relative">
 
         <div className="relative flex items-center gap-4">
           <Link
@@ -607,10 +605,10 @@ function WorkspacePage() {
             initial={false}
             animate={{ width: sidebarCollapsed ? 56 : 320 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="border-r border-shell-800 bg-shell-900/50 flex flex-col overflow-hidden"
+            className="bg-shell-900 flex flex-col overflow-hidden"
           >
             {/* Sidebar header */}
-            <div className={`flex items-center justify-between px-3 py-3 border-b border-shell-800 ${sidebarCollapsed ? 'justify-center' : ''}`}>
+            <div className={`flex items-center justify-between px-3 py-3 ${sidebarCollapsed ? 'justify-center' : ''}`}>
               {!sidebarCollapsed && (
                 <span className="font-display text-xs text-shell-500 uppercase tracking-wider">
                   Files
@@ -683,7 +681,7 @@ function WorkspacePage() {
                   </div>
                 ) : (
                   // Expanded: starred files list
-                  <div className="border-b border-shell-800 py-2">
+                  <div className="py-2">
                     {[...starredPaths].map((filePath) => {
                       const fileName = filePath.split('/').pop() || filePath
                       const ext = fileName.includes('.') ? '.' + fileName.split('.').pop() : ''
@@ -747,7 +745,7 @@ function WorkspacePage() {
 
             {/* Sidebar footer */}
             {pathValid && !sidebarCollapsed && (
-              <div className="px-4 py-2 border-t border-shell-800">
+              <div className="px-4 py-2">
                 <p className="font-console text-[11px] text-shell-600 truncate">
                   {workspacePath}
                 </p>

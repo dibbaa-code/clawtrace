@@ -27,9 +27,19 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <div className="min-h-screen bg-shell-950 texture-dots relative overflow-hidden">
-      {/* Subtle background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-crab-950/10 via-transparent to-shell-950" />
+    <div className="min-h-screen bg-[#1a1510] texture-sand relative overflow-hidden">
+      {/* Brown gradient overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            linear-gradient(180deg, transparent 0%, rgba(60, 45, 35, 0.4) 50%, rgba(45, 35, 28, 0.6) 100%),
+            radial-gradient(ellipse 80% 50% at 50% 100%, rgba(55, 42, 32, 0.5) 0%, transparent 60%)
+          `,
+        }}
+      />
+      {/* Subtle accent gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-crab-950/10 via-transparent to-transparent pointer-events-none" />
       <div className="absolute top-0 left-0 w-96 h-96 bg-crab-600/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-neon-coral/3 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
@@ -64,7 +74,7 @@ function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
             className="font-arcade text-3xl md:text-4xl text-crab-400 mb-4 leading-tight"
-            style={{ textShadow: '0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(0, 217, 255, 0.2)' }}
+            style={{ textShadow: '0 0 20px rgba(230, 57, 70, 0.4), 0 0 40px rgba(16, 185, 129, 0.2)' }}
           >
             clawtrace
           </motion.h1>
@@ -131,7 +141,7 @@ function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-shell-900/50 rounded-full border border-shell-800/30"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-shell-900/80 rounded-full"
           >
             <span className="w-2 h-2 rounded-full bg-neon-mint animate-pulse" />
             <span className="font-display text-xs text-shell-500">

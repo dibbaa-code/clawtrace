@@ -24,7 +24,13 @@ export const Route = createRootRoute({
 
 function NotFound() {
   return (
-    <div className="min-h-screen bg-shell-950 texture-dots flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#1a1510] texture-sand flex items-center justify-center relative overflow-hidden">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `linear-gradient(180deg, transparent 0%, rgba(60, 45, 35, 0.4) 50%, rgba(45, 35, 28, 0.6) 100%)`,
+        }}
+      />
       {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-96 h-96 bg-crab-600/10 rounded-full blur-3xl" />
