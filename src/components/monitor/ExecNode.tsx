@@ -72,9 +72,9 @@ const statusConfig: Record<
 
 function streamStyle(stream: MonitorExecOutputChunk['stream']): string {
   if (stream === 'stderr') {
-    return 'text-red-200/90 bg-red-950/20 border-red-900/40'
+    return 'text-red-200 bg-red-950/30 border-red-800/50'
   }
-  return 'text-neon-cyan/90 bg-shell-950/50 border-shell-800/60'
+  return 'text-gray-200 bg-shell-950 border-shell-700'
 }
 
 export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps) {
@@ -108,21 +108,21 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
       transition={{ duration: 0.2 }}
       onClick={() => setExpanded((prev) => !prev)}
       className={`
-        px-3.5 py-2.5 rounded-xl border min-w-[220px] cursor-pointer
-        ${isMalicious
-          ? 'bg-red-950/60 border-red-800/80'
-          : 'bg-shell-900/95 border-shell-700/60 backdrop-blur-sm'
-        }
-        ${selected ? 'ring-2 ring-white/20' : ''}
-        ${expanded ? 'max-w-[680px]' : 'max-w-[360px]'}
-        transition-all duration-150 hover:bg-shell-800/95
+        px-4 py-3 rounded-lg border-2 min-w-[240px] cursor-pointer
+        bg-shell-900
+        ${isMalicious ? 'border-red-500 bg-red-950/40' : `${status.borderColor} bg-shell-900`}
+        ${selected ? 'ring-2 ring-white/40' : ''}
+        ${expanded ? 'max-w-[680px]' : 'max-w-[380px]'}
+        transition-all duration-150 hover:bg-shell-800
       `}
       style={{
         boxShadow: isMalicious
-          ? '0 2px 16px rgba(185, 28, 28, 0.25), 0 0 0 1px rgba(220, 38, 38, 0.15)'
-          : selected
-            ? '0 0 0 1px rgba(255,255,255,0.1)'
-            : '0 2px 8px rgba(0, 0, 0, 0.2)',
+          ? '0 0 16px rgba(239, 68, 68, 0.35), 0 4px 12px rgba(0, 0, 0, 0.3)'
+          : data.status === 'completed'
+            ? '0 0 14px rgba(16, 185, 129, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3)'
+            : data.status === 'running'
+              ? '0 0 14px rgba(0, 217, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3)'
+              : '0 4px 12px rgba(0, 0, 0, 0.3)',
       }}
     >
       <Handle
@@ -131,16 +131,16 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
         className="bg-shell-600! w-2! h-2! border-shell-800!"
       />
 
-      {/* Header: compact */}
+      {/* Header */}
       <div className="flex items-center gap-2 mb-2">
-        <Terminal size={11} className={isMalicious ? 'text-red-400/80' : 'text-shell-400'} />
-        <span className={`font-display text-[11px] font-medium uppercase tracking-wider ${isMalicious ? 'text-red-200/90' : 'text-gray-400'}`}>
+        <Terminal size={14} className={isMalicious ? 'text-red-400' : 'text-shell-300'} />
+        <span className={`font-display text-xs font-semibold uppercase tracking-wide ${isMalicious ? 'text-red-100' : 'text-gray-200'}`}>
           Exec
         </span>
         <span
           className={`
-            ml-1 px-2 py-0.5 rounded-md text-[11px] font-console truncate max-w-[220px]
-            ${isMalicious ? 'bg-red-900/40 text-red-200/90 border border-red-800/80' : `border border-shell-700/60 ${status.badgeColor}`}
+            ml-1 px-2 py-0.5 rounded-md text-xs font-console truncate max-w-[240px] border
+            ${isMalicious ? 'bg-red-900/50 text-red-100 border-red-700/60' : `border-shell-600 ${status.badgeColor}`}
           `}
           title={data.command}
         >
@@ -177,58 +177,58 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
             </AnimatePresence>
           </button>
           <StatusIcon
-            size={12}
+            size={14}
             className={`${isMalicious ? 'text-red-400' : status.iconColor} ${status.animate ? 'animate-spin' : ''}`}
           />
         </div>
       </div>
 
-      {/* Threat: minimal pill */}
+      {/* Threat badge */}
       {isMalicious && (
-        <div className="mb-2 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-          <span className="font-console text-[11px] text-red-200/90">
+        <div className="mb-2 flex items-center gap-2 px-2 py-1 rounded-md bg-red-900/50 border border-red-700/60">
+          <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+          <span className="font-console text-xs text-red-100 font-medium">
             {data.threat?.severity ?? 'alert'}
           </span>
           {data.threat?.reason && (
-            <span className="font-console text-[10px] text-red-300/60 truncate max-w-[200px]" title={data.threat.reason}>
+            <span className="font-console text-xs text-red-200/90 truncate max-w-[240px]" title={data.threat.reason}>
               · {data.threat.reason}
             </span>
           )}
         </div>
       )}
 
-      {/* Meta: single line */}
-      <div className="font-console text-[10px] text-shell-500 mb-2 flex items-center gap-2 flex-wrap">
+      {/* Meta */}
+      <div className="font-console text-xs text-gray-300 mb-2 flex items-center gap-2 flex-wrap">
         <span>{formatTime(data.lastActivityAt)}</span>
         {data.traceId && (
-          <span className="text-shell-600" title={`Trace: ${data.traceId}`}>#{data.traceId}</span>
+          <span className="text-shell-400" title={`Trace: ${data.traceId}`}>#{data.traceId}</span>
         )}
-        <span className="text-shell-600">pid:{data.pid}</span>
+        <span>pid:{data.pid}</span>
         {data.exitCode != null && (
-          <span className={data.exitCode === 0 ? 'text-neon-mint/80' : 'text-red-400/80'}>
+          <span className={data.exitCode === 0 ? 'text-neon-mint' : 'text-red-400'}>
             exit:{data.exitCode}
           </span>
         )}
-        {displayDuration && <span className="text-neon-cyan/80">{displayDuration}</span>}
-        {data.status === 'running' && <span className="text-neon-peach/80">live</span>}
+        {displayDuration && <span className="text-neon-cyan">{displayDuration}</span>}
+        {data.status === 'running' && <span className="text-neon-peach">live</span>}
       </div>
 
       {data.outputTruncated && (
-        <div className="mb-2 text-[10px] font-console text-neon-peach/80">
-          truncated
+        <div className="mb-2 text-xs font-console text-neon-peach">
+          output truncated
         </div>
       )}
 
       {hasOutput && !expanded && (
-        <pre className="font-console text-[11px] text-shell-300/90 bg-shell-950/50 border border-shell-800/50 rounded-lg p-2 overflow-hidden line-clamp-4 whitespace-pre-wrap">
+        <pre className="font-console text-xs text-gray-200 bg-shell-950 border border-shell-700 rounded p-2 overflow-hidden line-clamp-4 whitespace-pre-wrap">
           {preview || '(no output)'}
         </pre>
       )}
 
       {hasOutput && expanded && (
-        <div className="mt-1.5 border border-shell-800/50 rounded-lg bg-shell-950/40 max-h-[320px] overflow-auto">
-          <div className="sticky top-0 z-10 flex items-center justify-between px-2 py-1 text-[10px] font-console text-shell-500 bg-shell-950/90 border-b border-shell-800/50">
+        <div className="mt-2 border border-shell-700 rounded bg-shell-950/80 max-h-[320px] overflow-auto">
+          <div className="sticky top-0 z-10 flex items-center justify-between px-2 py-1.5 text-xs font-console text-gray-300 bg-shell-900 border-b border-shell-700">
             <span>{status.label}</span>
             <span>{data.outputs.length} chunks</span>
           </div>
@@ -236,15 +236,15 @@ export const ExecNode = memo(function ExecNode({ data, selected }: ExecNodeProps
             {data.outputs.map((chunk) => (
               <div
                 key={chunk.id}
-                className={`border rounded-lg px-2 py-1 ${streamStyle(chunk.stream)}`}
+                className={`border rounded px-2 py-1.5 ${streamStyle(chunk.stream)}`}
               >
-                <div className="flex items-center gap-2 mb-0.5 text-[10px] font-console text-shell-500">
-                  <span className={chunk.stream === 'stderr' ? 'text-red-400/80' : 'text-neon-cyan/80'}>
+                <div className="flex items-center gap-2 mb-1 text-xs font-console text-gray-400">
+                  <span className={chunk.stream === 'stderr' ? 'text-red-400' : 'text-neon-cyan'}>
                     {chunk.stream}
                   </span>
                   <span>{formatTime(chunk.timestamp)}</span>
                 </div>
-                <pre className="font-console text-[11px] whitespace-pre-wrap">
+                <pre className="font-console text-xs text-gray-200 whitespace-pre-wrap">
                   {chunk.text}
                 </pre>
               </div>
