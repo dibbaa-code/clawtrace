@@ -63,11 +63,6 @@ export async function analyzeThreat(
   action?: MonitorAction,
   execEvent?: MonitorExecEvent
 ): Promise<ThreatInfo> {
-  if (!process.env.OPENAI_API_KEY) {
-    console.warn('[threat-analyzer] OPENAI_API_KEY not set, skipping analysis')
-    return { malicious: false }
-  }
-
   const context = buildEventContext(action, execEvent)
   if (!action && !execEvent) {
     return { malicious: false }

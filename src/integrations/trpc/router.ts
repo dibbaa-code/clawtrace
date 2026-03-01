@@ -251,7 +251,7 @@ const openclawRouter = router({
           persistence.addAction(enrichedAction)
           emit.next({ type: 'action', action: enrichedAction })
 
-          if (threat.malicious) {
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL) {
             sendDiscordAlert({
               traceId,
               threat,
@@ -269,7 +269,7 @@ const openclawRouter = router({
           persistence.addExecEvent(enrichedExec)
           emit.next({ type: 'exec', execEvent: enrichedExec })
 
-          if (threat.malicious) {
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL) {
             sendDiscordAlert({
               traceId,
               threat,
