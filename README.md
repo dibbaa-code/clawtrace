@@ -5,7 +5,7 @@ Real-time companion monitor for [OpenClaw (Clawdbot)](https://github.com/opencla
 
 Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a live node graph. See thinking states, tool calls, and response chains as they happen.
 
-![Clawtrace Monitor](public/monitor.png)
+![Clawtrace Monitor](public/home.png)
 
 ## Features
 
