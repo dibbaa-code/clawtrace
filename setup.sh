@@ -149,7 +149,8 @@ echo -e "${CYAN}  Building & starting clawtrace...${NC}"
 echo ""
 
 cd "$INSTALL_DIR"
-docker compose up -d --build
+docker compose build --no-cache
+docker compose up -d
 
 # Get machine IP
 IP=$(hostname -I 2>/dev/null | awk '{print $1}' || curl -s ifconfig.me 2>/dev/null || echo "localhost")
