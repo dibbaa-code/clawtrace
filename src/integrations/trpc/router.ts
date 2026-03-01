@@ -34,6 +34,37 @@ let debugMode = false
 let collectLogs = false
 const collectedEvents: Array<{ timestamp: number; event: unknown }> = []
 
+// Trace ID cache: same logical event (runId/execId) gets same traceId so Discord links match dashboard
+const traceIdCache = new Map<string, string>()
+const MAX_TRACE_CACHE = 2000
+
+function getOrCreateTraceId(key: string): string {
+  let id = traceIdCache.get(key)
+  if (!id) {
+    id = nanoid(12)
+    traceIdCache.set(key, id)
+    if (traceIdCache.size > MAX_TRACE_CACHE) {
+      const first = traceIdCache.keys().next().value
+      if (first) traceIdCache.delete(first)
+    }
+  }
+  return id
+}
+
+// Dedupe Discord alerts: only one alert per logical event
+const alertedKeys = new Set<string>()
+const MAX_ALERTED = 5000
+
+function shouldSendAlert(key: string): boolean {
+  if (alertedKeys.has(key)) return false
+  alertedKeys.add(key)
+  if (alertedKeys.size > MAX_ALERTED) {
+    const first = alertedKeys.values().next().value
+    if (first) alertedKeys.delete(first)
+  }
+  return true
+}
+
 const t = initTRPC.create({
   transformer: superjson,
 })
@@ -227,8 +258,6 @@ const openclawRouter = router({
           console.log('[DEBUG] Parsed exec:', parsed.execEvent.eventType, 'runId:', parsed.execEvent.runId, 'pid:', parsed.execEvent.pid)
         }
 
-        // Generate trace ID for action/exec events
-        const traceId = nanoid(12)
         const hasAction = !!parsed.action
         const hasExec = !!parsed.execEvent
 
@@ -243,6 +272,11 @@ const openclawRouter = router({
           emit.next({ type: 'session', session: parsed.session })
         }
         if (parsed.action) {
+          // Use consistent traceId per logical action so Discord links match dashboard
+          const isUnifiedAction = ['start', 'streaming', 'complete', 'error', 'aborted'].includes(parsed.action.type)
+          const traceKey = isUnifiedAction ? parsed.action.runId : parsed.action.id
+          const traceId = getOrCreateTraceId(traceKey)
+
           const enrichedAction: MonitorAction = {
             ...parsed.action,
             traceId,
@@ -251,9 +285,9 @@ const openclawRouter = router({
           persistence.addAction(enrichedAction)
           emit.next({ type: 'action', action: enrichedAction })
 
-          // Only alert on finalized actions - skip streaming chunks to avoid duplicate alerts
+          // Only alert on finalized actions; dedupe by traceKey to avoid duplicate alerts
           const shouldAlertAction = ['complete', 'tool_call', 'tool_result', 'error', 'aborted'].includes(parsed.action.type)
-          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertAction) {
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertAction && shouldSendAlert(traceKey)) {
             sendDiscordAlert({
               traceId,
               threat,
@@ -263,6 +297,9 @@ const openclawRouter = router({
           }
         }
         if (parsed.execEvent) {
+          const traceKey = parsed.execEvent.execId
+          const traceId = getOrCreateTraceId(traceKey)
+
           const enrichedExec: MonitorExecEvent = {
             ...parsed.execEvent,
             traceId,
@@ -271,9 +308,9 @@ const openclawRouter = router({
           persistence.addExecEvent(enrichedExec)
           emit.next({ type: 'exec', execEvent: enrichedExec })
 
-          // Only alert on completed exec - skip started/output to avoid duplicate alerts
+          // Only alert on completed exec; dedupe by execId
           const shouldAlertExec = parsed.execEvent.eventType === 'completed'
-          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertExec) {
+          if (threat.malicious && process.env.DISCORD_WEBHOOK_URL && shouldAlertExec && shouldSendAlert(traceKey)) {
             sendDiscordAlert({
               traceId,
               threat,
