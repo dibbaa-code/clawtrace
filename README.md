@@ -1,7 +1,7 @@
 # 🦀 Clawtrace
 <img width="656" height="302" alt="Screenshot 2026-03-01 at 11 53 05 AM" src="https://github.com/user-attachments/assets/dad73ab4-3e30-4632-8abb-8746e8c16a96" />
 
-Real-time companion monitor for [OpenClaw (Clawdbot)](https://github.com/openclaw/openclaw) agents by [@dibbaa-code](https://x.com/dibbaa-code).
+Real-time companion monitor for [OpenClaw (Clawdbot)](https://github.com/openclaw/openclaw) agents by [@dibbaa-code](https://x.com/dibbaa-code) and [@srilaasya](https://x.com/n_sri_laasya).
 
 Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a live node graph. See thinking states, tool calls, and response chains as they happen.
 
@@ -118,4 +118,8 @@ export CLAWDBOT_API_TOKEN=your-token
 
 ## Stack
 
-TanStack Start, ReactFlow, Framer Motion, tRPC, TanStack DB
+TanStack Start, ReactFlow, Framer Motion, tRPC, TanStack DB, Supermemory, OpenAI
+
+## Inspiration
+
+UI design and implementation inspired by another open-source repo @crabwalk
