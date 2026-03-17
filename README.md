@@ -1,15 +1,16 @@
 # 🦀 Clawtrace
 <img width="656" height="302" alt="Screenshot 2026-03-01 at 11 53 05 AM" src="https://github.com/user-attachments/assets/dad73ab4-3e30-4632-8abb-8746e8c16a96" />
 
-Real-time companion monitor for [OpenClaw (Clawdbot)](https://github.com/openclaw/openclaw) agents by [@dibbaa-code](https://x.com/dibbaa-code) and [@srilaasya](https://x.com/n_sri_laasya).
+Real-time security layer for [OpenClaw (Clawdbot)](https://github.com/openclaw/openclaw) agents by [@dibbaa-code](https://x.com/dibbaa-code) and [@srilaasya](https://x.com/n_sri_laasya).
 
-Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a live node graph. See thinking states, tool calls, and response chains as they happen.
+Know when your OpenClaw agents go rogue. Detect anomalies, track agent behaviour, and get notified before critical events become incidents.
 
 ![Clawtrace Monitor](public/home.png)
 
 ## Features
 
-- **Live activity graph** - ReactFlow visualization of agent sessions and action chains
+- **Get Intelligent Alerts** - Get Alerts when your OpenClaw agents do something malicious 
+- **Live activity Monitor** - ReactFlow visualisation of agent sessions and action chains
 - **Multi-platform** - Monitor agents across all messaging platforms simultaneously
 - **Real-time streaming** - WebSocket connection to openclaw gateway
 - **Action tracing** - Expand nodes to inspect tool args and payloads
